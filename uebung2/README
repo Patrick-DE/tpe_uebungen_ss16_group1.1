@@ -1,0 +1,11 @@
+README!!
+Um die Datei auszuführen:
+- Rechtsklick auf das Projekt
+- Properties
+- JAVA BUILD PATH -> LIBRARIES
+- GDI-MAKE IT SIMPLE  (VOM SIMON LÖSCHEN!!!)
+----------------
+- Rechtsklick auf das Projekt
+- BUILD PATH
+- ADD EXTERNAL ARCHIVES
+- GDI MAKE IT SIMPLE EINBINDEN
