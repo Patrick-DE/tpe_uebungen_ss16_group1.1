@@ -4,7 +4,7 @@ import static gdi.MakeItSimple.*;
 
 public class BTree implements BTreeInterface {
 
-    private String className; // Klassenname der verwalteten Objekte
+    private String className; // Class name of the objects which are being managed
     private BTreeNode root;
     private int degree;
     private int height;
@@ -14,7 +14,7 @@ public class BTree implements BTreeInterface {
 
     public BTree (int degree) {
         if (degree <= 0)
-            throw new GDIException("Unvalid degree!");
+            throw new GDIException("Invalid degree!");
 
         this.root = new BTreeNode(degree);
         this.degree = degree;
