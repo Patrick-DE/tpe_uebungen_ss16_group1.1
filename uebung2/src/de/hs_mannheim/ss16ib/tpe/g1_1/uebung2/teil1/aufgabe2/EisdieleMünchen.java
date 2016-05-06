@@ -1,23 +1,22 @@
-package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.eisdiele.teil2;
+package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.teil1.aufgabe2;
 
 import static gdi.MakeItSimple.*;
 
-public class EisdieleHannover extends Eisdiele {
-	String lokalesEis = "Butterkucheneis";
+public class EisdieleMünchen extends Eisdiele {
 
 	@Override
 	void begrüssen() {
-		println("Guten Tag!");
+		println("Griaß Gott!");
 
 	}
-
+	
 	public Eis erstelleEis(String typ) {
-		if(!checkName(angebot,typ) && !equals(lokalesEis,typ)){
+		if(!checkName(angebot,typ)){
 			return null;
 		}
 		Eis eis = null;
 		if(equals(typ,super.angebot[0])){
-			eis = new Spaghettieis();
+			eis = new SpaghettieisMonnem();
 		}
 		else if(equals(typ,super.angebot[1])){
 			eis = new Bananasplit();
@@ -29,9 +28,7 @@ public class EisdieleHannover extends Eisdiele {
 		else if(equals(typ,super.angebot[3])){
 			eis = new RoteFrüchteBecher();
 		}
-		else if(equals(typ,lokalesEis)){
-			eis = new ButterKuchenEis(); 
-		}
+		
 
 		eis.name(typ);
 		eis.behaeltnis();
@@ -43,23 +40,19 @@ public class EisdieleHannover extends Eisdiele {
 
 	@Override
 	void kassieren(double preis) {
-		println("Das macht dann " + preis +" €.");
+		println("Des macht dann " + preis +" €.");
 
 	}
 
 	@Override
 	void verabschieden(String eis) {
-		if(equals(eis, lokalesEis) || equals(eis,angebot[0]))
-			println("Auf Wiedersehen! Lassen sie sich ihr " + eis + " schmecken.");
-		else{
-			println("Auf Wiedersehen! Lassen sie sich ihren " + eis + " schmecken.");
+			println("Servus! Ich hoff ihr " + eis + " schmeckt erna.");
 		}
 
-	}
 
 	@Override
 	void entschuldigen(String typ) {
-		println("Tut mir leid " + typ + " haben wir leider nicht im Sortiment.");
+		println("Des dad ma leid " + typ + " hom mir net im Sortiment.");
 
 	}
 

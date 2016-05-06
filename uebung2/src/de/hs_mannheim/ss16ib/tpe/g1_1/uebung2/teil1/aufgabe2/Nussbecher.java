@@ -1,7 +1,7 @@
-package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.eisdiele.teil2;
+package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.teil1.aufgabe2;
 import static gdi.MakeItSimple.*;
 
-public class RoteFrüchteBecher extends Eis {
+public class Nussbecher extends Eis {
 
 	@Override
 	public void vorbereiten() {
@@ -74,15 +74,16 @@ public class RoteFrüchteBecher extends Eis {
 		return super.art;
 	}
 
+	@Override
 	public String[] sorten() {
 		super.sorten = new String[3];
-		super.sorten[0] = "Himbeere";
-		super.sorten[1] = "Erdbeere";
-		super.sorten[2] = "Kirsche";
+		super.sorten[0] = "Haselnuss";
+		super.sorten[1] = "Macadamianuss";
+		super.sorten[2] = "Pistazie";
 		return super.sorten;
 	}
 
-
+	@Override
 	public String[] extras() {
 		super.extras = new String[1];
 		super.extras[0] = "Schokosträusel";
@@ -91,7 +92,7 @@ public class RoteFrüchteBecher extends Eis {
 
 	@Override
 	public double preis() {
-		super.preis = 4.0;
+		super.preis = 4.50;
 		return super.preis;
 	}
 	

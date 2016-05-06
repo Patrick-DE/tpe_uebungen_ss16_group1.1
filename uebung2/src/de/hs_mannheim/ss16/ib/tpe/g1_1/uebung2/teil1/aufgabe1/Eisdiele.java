@@ -1,4 +1,4 @@
-package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.eisdiele.teil1;
+package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil1.aufgabe1;
 import static gdi.MakeItSimple.*;
 
 public class Eisdiele {

@@ -1,15 +1,15 @@
-package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.eisdiele.teil2;
+package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.teil1.aufgabe2;
 
 import static gdi.MakeItSimple.*;
 
-public class EisdieleMünchen extends Eisdiele {
+public class EisdieleMonnem extends Eisdiele {
 
 	@Override
 	void begrüssen() {
-		println("Griaß Gott!");
+		println("Jou!");
 
 	}
-	
+
 	public Eis erstelleEis(String typ) {
 		if(!checkName(angebot,typ)){
 			return null;
@@ -40,19 +40,19 @@ public class EisdieleMünchen extends Eisdiele {
 
 	@Override
 	void kassieren(double preis) {
-		println("Des macht dann " + preis +" €.");
+		println("Dos macht donn " + preis +" €.");
 
 	}
 
 	@Override
 	void verabschieden(String eis) {
-			println("Servus! Ich hoff ihr " + eis + " schmeckt erna.");
+			println("Alla! Lossen sie sich ihrn " + eis + " schmecka.");
 		}
 
 
 	@Override
 	void entschuldigen(String typ) {
-		println("Des dad ma leid " + typ + " hom mir net im Sortiment.");
+		println("dud mir leid " + typ + " hawwen mir nit im Sortiment.");
 
 	}
 

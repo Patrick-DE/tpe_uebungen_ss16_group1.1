@@ -1,7 +1,7 @@
-package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.eisdiele.teil2;
+package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.teil1.aufgabe2;
 import static gdi.MakeItSimple.*;
 
-public class Spaghettieis extends Eis {
+public class SpaghettieisMonnem extends Eis {
 
 	@Override
 	public void vorbereiten() {
@@ -85,7 +85,7 @@ public class Spaghettieis extends Eis {
 	@Override
 	public String[] extras() {
 		super.extras = new String[1];
-		super.extras[0] = "Schokosträusel";
+		super.extras[0] = "Monnemer Dreck";
 		return super.extras;
 	}
 

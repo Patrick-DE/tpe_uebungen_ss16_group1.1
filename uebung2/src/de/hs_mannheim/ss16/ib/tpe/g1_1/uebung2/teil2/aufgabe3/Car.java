@@ -1,4 +1,4 @@
-package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.autoverwaltung;
+package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil2.aufgabe3;
 
 public abstract class Car implements Comparable {
 	private String brand;
