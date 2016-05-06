@@ -1,7 +1,7 @@
-package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.teil1.aufgabe2;
+package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil1.aufgabe2;
 import static gdi.MakeItSimple.*;
 
-public class SpaghettieisMonnem extends Eis {
+public class RoteFrüchteBecher extends Eis {
 
 	@Override
 	public void vorbereiten() {
@@ -64,34 +64,34 @@ public class SpaghettieisMonnem extends Eis {
 
 	@Override
 	public String behaeltnis() {
-		super.behaeltnis = "Teller";
+		super.behaeltnis = "Becher";
 		return super.behaeltnis;
 	}
 
 	@Override
 	public String art() {
-		super.art = "Spaghettis";
+		super.art = "Kugeln";
 		return super.art;
 	}
 
-	@Override
 	public String[] sorten() {
-		super.sorten = new String[2];
-		super.sorten[0] = "Vanille";
+		super.sorten = new String[3];
+		super.sorten[0] = "Himbeere";
 		super.sorten[1] = "Erdbeere";
+		super.sorten[2] = "Kirsche";
 		return super.sorten;
 	}
 
-	@Override
+
 	public String[] extras() {
 		super.extras = new String[1];
-		super.extras[0] = "Monnemer Dreck";
+		super.extras[0] = "Schokosträusel";
 		return super.extras;
 	}
 
 	@Override
 	public double preis() {
-		super.preis = 3.5;
+		super.preis = 4.0;
 		return super.preis;
 	}
 	

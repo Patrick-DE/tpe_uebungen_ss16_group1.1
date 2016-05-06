@@ -1,7 +1,7 @@
-package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.teil1.aufgabe2;
+package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil1.aufgabe2;
 import static gdi.MakeItSimple.*;
 
-public class BananasplitMünchen extends Eis {
+public class Nussbecher extends Eis {
 
 	@Override
 	public void vorbereiten() {
@@ -38,7 +38,7 @@ public class BananasplitMünchen extends Eis {
 	@Override
 	public void dekorieren() {
 		if(super.extras != null){
-			print("Ich hol kurz die ");
+			print("Ich hole kurz die ");
 			if(super.extras.length == 1){
 				print(super.extras[0] +".");
 			}
@@ -64,7 +64,7 @@ public class BananasplitMünchen extends Eis {
 
 	@Override
 	public String behaeltnis() {
-		super.behaeltnis = "Bierwaffel";
+		super.behaeltnis = "Becher";
 		return super.behaeltnis;
 	}
 
@@ -76,22 +76,23 @@ public class BananasplitMünchen extends Eis {
 
 	@Override
 	public String[] sorten() {
-		super.sorten = new String[1];
-		super.sorten[0] = "Banane";
+		super.sorten = new String[3];
+		super.sorten[0] = "Haselnuss";
+		super.sorten[1] = "Macadamianuss";
+		super.sorten[2] = "Pistazie";
 		return super.sorten;
 	}
 
 	@Override
 	public String[] extras() {
-		super.extras = new String[2];
+		super.extras = new String[1];
 		super.extras[0] = "Schokosträusel";
-		super.extras[1] = "Schokoladenkokossosse";
 		return super.extras;
 	}
 
 	@Override
 	public double preis() {
-		super.preis = 4.0;
+		super.preis = 4.50;
 		return super.preis;
 	}
 	

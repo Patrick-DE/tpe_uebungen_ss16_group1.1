@@ -1,4 +1,4 @@
-package de.hs_mannheim.ss16.tpe.g1_1.uebung2.teil2.aufgabe1;
+package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil2.aufgabe1;
 import static gdi.MakeItSimple.*;
 
 public class Menu {

@@ -1,7 +1,7 @@
-package de.hs_mannheim.ss16ib.tpe.g1_1.uebung2.teil1.aufgabe2;
+package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil1.aufgabe2;
 import static gdi.MakeItSimple.*;
 
-public class Spaghettieis extends Eis {
+public class Bananasplit extends Eis {
 
 	@Override
 	public void vorbereiten() {
@@ -70,28 +70,28 @@ public class Spaghettieis extends Eis {
 
 	@Override
 	public String art() {
-		super.art = "Spaghettis";
+		super.art = "Kugeln";
 		return super.art;
 	}
 
 	@Override
 	public String[] sorten() {
-		super.sorten = new String[2];
-		super.sorten[0] = "Vanille";
-		super.sorten[1] = "Erdbeere";
+		super.sorten = new String[1];
+		super.sorten[0] = "Banane";
 		return super.sorten;
 	}
 
 	@Override
 	public String[] extras() {
-		super.extras = new String[1];
+		super.extras = new String[2];
 		super.extras[0] = "Schokosträusel";
+		super.extras[1] = "Schokososse";
 		return super.extras;
 	}
 
 	@Override
 	public double preis() {
-		super.preis = 3.5;
+		super.preis = 4.0;
 		return super.preis;
 	}
 	
