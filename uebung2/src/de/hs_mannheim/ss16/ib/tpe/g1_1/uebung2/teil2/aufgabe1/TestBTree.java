@@ -24,20 +24,23 @@ public class TestBTree {
 		assertEquals(19,test.size());
 		
 	}
+	@Test
 	public void testContains(){
 		BTree test = new BTree(1);
 		assertEquals(false,test.contains(5));
 		test.insert(5);
 		assertEquals(true,test.contains(5));
-		assertEquals(true, test.contains(null));
+		assertEquals(false, test.contains(null));
 	
 	}
+	@Test
 	public void testIsEmpty(){
 		BTree test = new BTree(1);
 		assertEquals(true,test.isEmpty());
 		test.insert(5);
 		assertEquals(false,test.isEmpty());
 	}
+	@Test
 	public void testMaxandMin(){
 		BTree test = new BTree(1);
 		int[] a={1,10,12,15,17,11,2,18,20,33,50,60,19,22};
@@ -48,5 +51,6 @@ public class TestBTree {
 		assertEquals(60,(int)test.getMax());
 		
 	}
+	
 
 }
