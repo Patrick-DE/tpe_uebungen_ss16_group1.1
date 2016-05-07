@@ -11,7 +11,7 @@ public class BTreeNode {
 
     public BTreeNode(int degree){
         this.degree=degree;
-        elements = new Integer[2*degree+1];
+        elements = new Comparable[2*degree+1];
         references = new BTreeNode[2*degree+2];
     }
 
