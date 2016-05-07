@@ -15,6 +15,10 @@ public class BTreeNode {
         references = new BTreeNode[2*degree+2];
     }
 
+    public int getDegree() {
+        return degree;
+    }
+    
     /**
      * 
      * @return elements of node

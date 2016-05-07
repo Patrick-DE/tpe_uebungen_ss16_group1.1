@@ -4,7 +4,7 @@ import static gdi.MakeItSimple.*;
 
 public class BTree implements BTreeInterface {
 
-    private String className; // Class name of the objects which are being managed
+    private String className; // Klassenname der verwalteten Objekte
     private BTreeNode root;
     private int degree;
     private int height;
@@ -14,7 +14,7 @@ public class BTree implements BTreeInterface {
 
     public BTree (int degree) {
         if (degree <= 0)
-            throw new GDIException("Invalid degree!");
+            throw new GDIException("Unvalid degree!");
 
         this.root = new BTreeNode(degree);
         this.degree = degree;
@@ -150,12 +150,13 @@ public class BTree implements BTreeInterface {
             
             node.getElements()[i] = null;
             int indexOfDeletedElement = i;
+            
             if (node == root) {
                 if (node.hasReferences()) {
                     // replace empty place of node with greatest element of its left sub tree
                     if (getGreatestFromLeftSubtree(node, indexOfDeletedElement) != null) {
                         node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
-                    // replace empty place of node with smallest element of its right sub tree
+                        // replace empty place of node with smallest element of its right sub tree
                     } else if (getSmallestFromRightSubtree(node, indexOfDeletedElement) != null) {
                         node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
                     } else {
@@ -165,20 +166,22 @@ public class BTree implements BTreeInterface {
                     // no problem
                 }
             } else {
-                if (node.getNumberOfElements() < degree) {
+                while (checkUnderflow(node)) {
                     if (node.hasReferences()) {
                         // replace empty place of node with greatest element of its left sub tree
                         if (getGreatestFromLeftSubtree(node, indexOfDeletedElement) != null) {
-                            node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
-                        // replace empty place of node with smallest element of its right sub tree
+                            node.addVal(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement));
+//                            node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
+                            // replace empty place of node with smallest element of its right sub tree
                         } else if (getSmallestFromRightSubtree(node, indexOfDeletedElement) != null) {
-                            node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
+                            node.addVal(indexOfDeletedElement, getSmallestFromRightSubtree(node, indexOfDeletedElement));
+//                            node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
                         } else {
-                          // Situationen wo sich die Höhe des Baumes ändert  
+                            // Situationen wo sich die Höhe des Baumes ändert  
                         }
                     } else {
                         // node is leaf
-                        
+
                         // node is a leaf
                         // push all elements one to the left from the index of the deleted element
                         for (int j = indexOfDeletedElement; j < node.getElements().length - 2; j++)
@@ -202,32 +205,35 @@ public class BTree implements BTreeInterface {
                         if (leftSibling != null && leftSibling.getNumberOfElements() > degree) {
                             Comparable newValForNode = parent.getElements()[childIndex - 1];
                             Comparable newValForParent = leftSibling.getMax();
-                            
+
                             parent.getElements()[childIndex - 1] = newValForParent;
                             node.addVal(0, newValForNode);
                             leftSibling.getElements()[leftSibling.getNumberOfElements() - 1] = null;
                             this.size--;
-                            
-                        // push smallest element of right sibling up to parent
-                        // and push parent element down to correct underflow of node
+                            break; // no other underflow possible
+
+                            // push smallest element of right sibling up to parent
+                            // and push parent element down to correct underflow of node
                         } else if (rightSibling != null && rightSibling.getNumberOfElements() > degree) {
                             Comparable newValForNode = parent.getElements()[childIndex];
                             Comparable newValForParent = rightSibling.getMin();
-                            
+
                             parent.getElements()[childIndex] = newValForParent;
                             node.addVal(node.getNumberOfElements(), newValForNode);
                             for (int j = 0; j < rightSibling.getNumberOfElements(); j++)
                                 rightSibling.getElements()[j] = rightSibling.getElements()[j+1];
                             this.size--;
-                            
+                            break; // no other underflow possible;
+
                         } else {
                             // right or left sibling or both of them have minimum number of elements
                             // push parent element down and merge specified children
-                            if (parent.getNumberOfElements() > degree) {
+//                            if (parent.getNumberOfElements() > degree) {
                                 if (leftSibling != null) {
                                     Comparable parentElementOfleftSiblingAndNode = parent.getElements()[childIndex - 1];
-                                    node.addVal(0, parentElementOfleftSiblingAndNode);
-                                    BTreeNode newChild = merge(leftSibling, node);
+                                    indexOfDeletedElement = childIndex - 1;
+                                    leftSibling.addVal(leftSibling.getNumberOfElements(), parentElementOfleftSiblingAndNode);
+                                    BTreeNode newChild = mergeLeaf(leftSibling, node);
                                     for (int j = childIndex - 1; j < parent.getElements().length-2; j++) {
                                         parent.getElements()[j] = parent.getElements()[j+1];
                                         parent.getReferences()[j+1] = parent.getReferences()[j+2];
@@ -235,17 +241,20 @@ public class BTree implements BTreeInterface {
                                     parent.getReferences()[childIndex - 1] = newChild;
                                 } else {
                                     Comparable parentElementOfrightSiblingAndNode = parent.getElements()[childIndex];
+                                    indexOfDeletedElement = childIndex;
                                     node.addVal(node.getNumberOfElements(), parentElementOfrightSiblingAndNode);
-                                    BTreeNode newChild = merge(node, rightSibling);
+                                    BTreeNode newChild = mergeLeaf(node, rightSibling);
                                     for (int j = childIndex; j < parent.getElements().length-2; j++) {
                                         parent.getElements()[j] = parent.getElements()[j+1];
                                         parent.getReferences()[j+1] = parent.getReferences()[j+2];
                                     }
                                     parent.getReferences()[childIndex] = newChild;
                                 }
-                            } else {
-                                // Situationen wo sich die Höhe des Baumes ändert
-                            }
+                                
+                                node = parent;
+//                            } else {
+//                                // Situationen wo sich die Höhe des Baumes ändert
+//                            }
                         }
                     }
                 }
@@ -254,27 +263,31 @@ public class BTree implements BTreeInterface {
         }
     }
     
-    private BTreeNode merge(BTreeNode nodeWithSmallerElements, BTreeNode nodeWithGreaterElements) {
+    private boolean checkUnderflow(BTreeNode node) {
+        if (node != root && node.getNumberOfElements() < degree)
+            return true;
+        else
+            return false;
+    }
+
+    // Die Methode muss ich noch so umschreiben, dass es auch für innere Knoten geht
+    private BTreeNode mergeLeaf(BTreeNode nodeWithSmallerElements, BTreeNode nodeWithGreaterElements) {
         if (isMergeable(nodeWithSmallerElements, nodeWithGreaterElements)) {
             BTreeNode mergedNode = new BTreeNode(degree);
-            BTreeNode[] referencesOfMergedNode = new BTreeNode[2*degree+2];
+//            BTreeNode[] referencesOfMergedNode = mergedNode.getReferences();
             int numberOfElements = nodeWithSmallerElements.getNumberOfElements() + nodeWithGreaterElements.getNumberOfElements();
             int i;
             for (i = 0; i < numberOfElements; i++) {
-                // last references of nodeWithSmallerElements
-                if (i == nodeWithSmallerElements.getNumberOfElements())
-                    referencesOfMergedNode[i] = nodeWithSmallerElements.getReferences()[i];
-                
                 if (i < nodeWithSmallerElements.getNumberOfElements()) {
                     mergedNode.addVal(i, nodeWithSmallerElements.getValue(i));
-                    referencesOfMergedNode[i] = nodeWithSmallerElements.getReferences()[i];
+//                    referencesOfMergedNode[i] = nodeWithSmallerElements.getReferences()[i];
                 } else {
                     mergedNode.addVal(i, nodeWithGreaterElements.getValue(i));
-                    referencesOfMergedNode[i] = nodeWithGreaterElements.getReferences()[i];
+//                    referencesOfMergedNode[i] = nodeWithGreaterElements.getReferences()[i];
                 }
             }
             // last reference of nodeWithGreaterElements
-            referencesOfMergedNode[i] = nodeWithGreaterElements.getReferences()[i];
+//            referencesOfMergedNode[i] = nodeWithGreaterElements.getReferences()[i];
             
             return mergedNode;
         } else {
@@ -283,6 +296,9 @@ public class BTree implements BTreeInterface {
     }
 
     private boolean isMergeable(BTreeNode node1, BTreeNode node2) {
+        if (node1.getDegree() != node2.getDegree())
+            return false;
+        
         if (node1.getNumberOfElements() + node2.getNumberOfElements() <= 2*degree)
             return true;
         else
@@ -309,10 +325,13 @@ public class BTree implements BTreeInterface {
         while(node.hasReferences())
             node = node.getReferences()[node.getNumberOfElements()];
         
-        if (node.getNumberOfElements() > degree)
-            return node.getMax();
-        else
+        if (node.getNumberOfElements() > degree) {
+            Comparable valForReplacement = node.getMax();
+            node.getElements()[node.getNumberOfElements() - 1] = null;
+            return valForReplacement;
+        } else {
             return null;
+        }
     }
 
     /**
