@@ -134,6 +134,7 @@ public class BTree implements BTreeInterface {
             BTreeNode node = this.root;
             
             int i = 0;
+            // proper node and position of the object is found
             while (node.getValue(i).compareTo(o) != 0) {
                 if (node.getValue(i).compareTo(o) > 0) {
                     node = node.getReferences()[i];
