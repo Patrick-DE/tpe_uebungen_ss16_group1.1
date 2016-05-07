@@ -50,6 +50,16 @@ public class TestBTree {
 		assertEquals(1,(int)test.getMin());
 		assertEquals(60,(int)test.getMax());
 		
+	}@Test
+	public void testDelete(){
+		BTree test = new BTree(1);
+		int[] a={1,10,12,15,17,11,2,18,20,33,50,60,19,22};
+		for(int i = 0; i < a.length; i++ ){
+			test.insert(a[i]);
+		}
+		test.delete(1);
+		assertEquals(false,test.contains(1));
+		
 	}
 	
 
