@@ -13,6 +13,7 @@ public class BTreeWithCarObjects {
 		cars.insert(audi);
 		cars.insert(tesla);
 		cars.insert(vw);
+		cars.insert(5);
 		println(cars.contains(bmw));
 		println(cars.insert(bmw));
 	}

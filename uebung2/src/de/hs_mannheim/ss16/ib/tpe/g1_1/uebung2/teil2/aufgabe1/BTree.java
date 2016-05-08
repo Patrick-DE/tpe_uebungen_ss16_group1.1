@@ -138,7 +138,7 @@ public class BTree implements BTreeInterface {
     /**
      * this method returns the most most general Class of a object which is not Object
      * @param o
-     *          the object to get the most general calss from
+     *          the object to get the most general class from
      * @return most general class which is not Object. If no superclass exists class of o will be returned
      */
     private Class getMostGeneralClass(Comparable o) {
