@@ -64,10 +64,11 @@ public class CrypterMainSwing extends JDialog {
 			
 			
 			{
-				println("If you would like to enter an encrypted message press one, if you would like to enter an decrypted message press two.");
+				println("If you would like to enter an encrypted message press one, if you would like to enter n decrypted message press two.");
 				int choice = readInt();
 				readLine();
 				if(choice == 1){
+					println("Enter the message:");
 					encrypted = readLine();
 					JLabel encryptedText = new JLabel(encrypted);
 					encryptedText.setHorizontalAlignment(SwingConstants.CENTER);
@@ -76,6 +77,7 @@ public class CrypterMainSwing extends JDialog {
 					
 				}
 				if(choice == 2){
+					println("Enter the message:");
 					decrypted = readLine();
 					JLabel encryptedText = new JLabel(decrypted);
 					encryptedText.setHorizontalAlignment(SwingConstants.CENTER);
