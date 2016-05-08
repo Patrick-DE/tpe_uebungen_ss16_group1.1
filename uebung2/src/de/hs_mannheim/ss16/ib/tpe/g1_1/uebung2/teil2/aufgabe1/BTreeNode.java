@@ -113,7 +113,12 @@ public class BTreeNode {
 
     public int getNumberOfElements() {
         int numberOfElements = 0;
-        while (this.getElements()[numberOfElements] != null)
+        for(int i = 0; i < this.getElements().length-1;i++){
+        	if(this.getElements()[i] != null){
+        		numberOfElements++;
+        	}
+        	
+        }
             numberOfElements++;
         return numberOfElements;
     }

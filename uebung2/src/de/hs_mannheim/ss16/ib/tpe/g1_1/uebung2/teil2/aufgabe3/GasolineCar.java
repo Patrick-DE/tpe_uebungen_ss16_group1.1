@@ -9,15 +9,15 @@ public class GasolineCar extends Car implements Gasoline {
 		this.emissionTier = emissionTier;
 		super.setID();
 	}
-	public int compareTo(Object obj) {
-		Car car = (Car)obj;
-		if(car.getID() == this.getID())
-			return 0;
-		else if(this.getID() < car.getID())
-			return -1;
-		else
-			return 1;
-	}
+//	public int compareTo(Object obj) {
+//		Car car = (Car)obj;
+//		if(car.getID() == this.getID())
+//			return 0;
+//		else if(this.getID() < car.getID())
+//			return -1;
+//		else
+//			return 1;
+//	}
 	public int getEmissionTier() {
 		return emissionTier;
 	}
