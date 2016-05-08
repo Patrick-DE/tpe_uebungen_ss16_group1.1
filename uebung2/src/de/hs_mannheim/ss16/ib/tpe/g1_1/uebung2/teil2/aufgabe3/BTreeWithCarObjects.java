@@ -3,6 +3,7 @@ package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil2.aufgabe3;
 import de.hs_mannheim.ss16.ib.tpe.g1_1.uebung2.teil2.aufgabe1.*;
 import static gdi.MakeItSimple.*;
 public class BTreeWithCarObjects {
+	
 	public static void main(String[] args){
 		BTree cars = new BTree(2);
 		Car bmw = new GasolineCar("BMW",2012,25000,2);
@@ -13,9 +14,6 @@ public class BTreeWithCarObjects {
 		cars.insert(audi);
 		cars.insert(tesla);
 		cars.insert(vw);
-		cars.insert(5);
-		println(cars.contains(bmw));
-		println(cars.insert(bmw));
 	}
 
 }
