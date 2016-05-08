@@ -4,7 +4,6 @@ public class test {
 	public static void main(String[] args){
 		println("Um in Hannover ein Eis zu essen bitte einmal die 1, für München die 2 und für Mannheim die 3.");
 		int auswahl = readInt();
-		println("Eisnamen eingeben wie in Eisdiele spezifiziert außer bei besondere .");
 		if(auswahl == 1){
 			println("Guten Tag! Was hätten sie denn gerne?");
 			println("Im Angebot haben wir Spaghettieis,Bananasplit,einen Nussbecher,einen rote Früchtebecher und Butterkucheneis.");
