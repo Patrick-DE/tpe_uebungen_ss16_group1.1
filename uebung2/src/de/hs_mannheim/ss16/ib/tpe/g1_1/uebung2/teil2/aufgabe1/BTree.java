@@ -199,16 +199,16 @@ public class BTree implements BTreeInterface {
                         // replace empty place of node with greatest element of its left sub tree
                         Comparable replacement = getGreatestFromLeftSubtree(node, indexOfDeletedElement, false);
                         if (replacement != null) {
-                            node.addVal(indexOfDeletedElement, replacement);
+                            node.addValInDelete(indexOfDeletedElement, replacement);
                             // node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
                             // replace empty place of node with smallest element of its right sub tree
                         } else {
                             replacement = getSmallestFromRightSubtree(node, indexOfDeletedElement, false);
                             if (replacement != null) {
-                                node.addVal(indexOfDeletedElement, replacement);
+                                node.addValInDelete(indexOfDeletedElement, replacement);
                                 // node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
                             } else {
-                                node.addVal(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement, true));
+                                node.addValInDelete(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement, true));
 
                                 // the leaf with replacement has a underflow now -> you have to correct it
                                 node = node.getReferences()[indexOfDeletedElement];
@@ -233,7 +233,7 @@ public class BTree implements BTreeInterface {
                                 node.addVal(indexOfDeletedElement, replacement);
                                 // node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
                             } else {
-                                node.addVal(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement, true));
+                                node.addValInDelete(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement, true));
 
                                 // the leaf with replacement has a underflow now -> you have to correct it
                                 node = node.getReferences()[indexOfDeletedElement];
