@@ -57,8 +57,10 @@ public class TestBTree {
 		for(int i = 0; i < a.length; i++ ){
 			test.insert(a[i]);
 		}
-		test.delete(18);
-		assertEquals(false,test.contains(10));
+		test.delete(1);
+		assertEquals(false,test.contains(1));
+		test.delete(2);
+		assertEquals(false,test.contains(2));
 		
 	}
 	
