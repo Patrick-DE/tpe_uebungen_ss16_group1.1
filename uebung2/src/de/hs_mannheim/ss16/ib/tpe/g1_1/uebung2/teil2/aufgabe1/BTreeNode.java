@@ -119,7 +119,6 @@ public class BTreeNode {
         	}
         	
         }
-            numberOfElements++;
         return numberOfElements;
     }
 
@@ -131,6 +130,13 @@ public class BTreeNode {
      * @param val
      *            value to be added
      */
+    public void addValInDelete(int index,Comparable val){
+    	if (this.elements[elements.length - 1] != null)
+            return;
+    	else
+         this.getElements()[index] = val;
+ 
+    }
     public void addVal(int index, Comparable val) {
         if (this.elements[elements.length - 1] != null)
             return;

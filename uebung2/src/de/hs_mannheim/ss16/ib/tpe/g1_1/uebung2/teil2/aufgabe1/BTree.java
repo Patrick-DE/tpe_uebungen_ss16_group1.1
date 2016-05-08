@@ -224,7 +224,7 @@ public class BTree implements BTreeInterface {
                         // replace empty place of node with greatest element of its left sub tree
                         Comparable replacement = getGreatestFromLeftSubtree(node, indexOfDeletedElement, false);
                         if (replacement != null) {
-                            node.addVal(indexOfDeletedElement, replacement);
+                            node.addValInDelete(indexOfDeletedElement, replacement);
                             // node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
                             // replace empty place of node with smallest element of its right sub tree
                         } else {
@@ -247,9 +247,10 @@ public class BTree implements BTreeInterface {
 
                         // node is a leaf
                         // push all elements one to the left from the index of the deleted element
-                        for (int j = indexOfDeletedElement; j < node.getElements().length - 2; j++)
+                        for (int j = indexOfDeletedElement; j < node.getElements().length - 2; j++){
                             node.getElements()[j] = node.getElements()[j+1];
-
+                            node.getElements()[j+1] = null;
+                        }
                         if (checkUnderflow(node)) {
                             BTreeNode parent = getParentOf(node);
                             BTreeNode leftSibling = null;
