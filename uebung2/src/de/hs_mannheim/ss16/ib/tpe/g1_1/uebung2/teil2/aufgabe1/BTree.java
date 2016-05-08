@@ -4,7 +4,7 @@ import static gdi.MakeItSimple.*;
 
 public class BTree implements BTreeInterface {
 
-    private String className; // Klassenname der verwalteten Objekte
+    private Class className; // most general class of the b tree objects, which is not Object class
     private BTreeNode root;
     private int degree;
     private int height;
@@ -27,9 +27,9 @@ public class BTree implements BTreeInterface {
     @Override
     public boolean insert(Comparable o) {
         if (this.isEmpty() && o != null)
-            this.className = o.getClass().getSimpleName();
+            setClassName(o);
         
-        if (o == null || this.contains(o)) {
+        if (o == null || className != getMostGeneralClass(o) || this.contains(o)) {
             return false;
         } else {
             BTreeNode node = this.root;
@@ -127,12 +127,39 @@ public class BTree implements BTreeInterface {
         return true;
     }
 
+    /**
+     * sets the className of the B tree. Now it can only take Comparable , which extend className
+     * @param o
+     */
+    private void setClassName(Comparable o) {
+        className = getMostGeneralClass(o);  
+    }
+    
+    /**
+     * this method returns the most most general Class of a object which is not Object
+     * @param o
+     *          the object to get the most general calss from
+     * @return most general class which is not Object. If no superclass exists class of o will be returned
+     */
+    private Class getMostGeneralClass(Comparable o) {
+        Class mostGeneralClass = o.getClass();
+        Class objectClass = new Object().getClass();
+        Class currentSuperClass = mostGeneralClass.getSuperclass();
+        
+        while (currentSuperClass != objectClass) {
+                mostGeneralClass = mostGeneralClass.getSuperclass();
+                currentSuperClass = mostGeneralClass.getSuperclass();
+        }
+        return mostGeneralClass;
+    }
+
     public boolean delete(Comparable o) {
-        if (!contains(o)) {
+        if (o == null || className != getMostGeneralClass(o) || !contains(o)) {
             return false;
         } else {
             BTreeNode node = this.root;
             
+            // find correct node
             int i = 0;
             while (node.getValue(i).compareTo(o) != 0) {
                 if (node.getValue(i).compareTo(o) > 0) {
@@ -148,37 +175,73 @@ public class BTree implements BTreeInterface {
                 }
             }
             
+            // correct min and max, if needed
+            if (node.getElements()[i] == this.max) {
+                if (i == 0)
+                    this.max = getParentOf(node).getElements()[getParentOf(node).getNumberOfElements() - 1];
+                else
+                    this.max = node.getElements()[i - 1];
+            } else if (node.getElements()[i] == this.min) {
+                if (i == 0)
+                    this.min = getParentOf(node).getElements()[0];
+                else
+                    this.min = node.getElements()[i + 1];
+            }
+            
             node.getElements()[i] = null;
             int indexOfDeletedElement = i;
             
-            if (node == root) {
-                if (node.hasReferences()) {
-                    // replace empty place of node with greatest element of its left sub tree
-                    if (getGreatestFromLeftSubtree(node, indexOfDeletedElement) != null) {
-                        node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
-                        // replace empty place of node with smallest element of its right sub tree
-                    } else if (getSmallestFromRightSubtree(node, indexOfDeletedElement) != null) {
-                        node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
+            
+            do {
+                if (node == root) {
+                    if (node.hasReferences()) {
+
+                        // replace empty place of node with greatest element of its left sub tree
+                        Comparable replacement = getGreatestFromLeftSubtree(node, indexOfDeletedElement, false);
+                        if (replacement != null) {
+                            node.addVal(indexOfDeletedElement, replacement);
+                            // node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
+                            // replace empty place of node with smallest element of its right sub tree
+                        } else {
+                            replacement = getSmallestFromRightSubtree(node, indexOfDeletedElement, false);
+                            if (replacement != null) {
+                                node.addVal(indexOfDeletedElement, replacement);
+                                // node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
+                            } else {
+                                node.addVal(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement, true));
+
+                                // the leaf with replacement has a underflow now -> you have to correct it
+                                node = node.getReferences()[indexOfDeletedElement];
+                                while(node.hasReferences())
+                                    node = node.getReferences()[node.getNumberOfElements()];
+                            }
+                        }
                     } else {
-                        // Situationen wo sich die Höhe des Baumes ändert
+                        break; // no problem
                     }
                 } else {
-                    // no problem
-                }
-            } else {
-                while (checkUnderflow(node)) {
                     if (node.hasReferences()) {
                         // replace empty place of node with greatest element of its left sub tree
-                        if (getGreatestFromLeftSubtree(node, indexOfDeletedElement) != null) {
-                            node.addVal(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement));
-//                            node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
+                        Comparable replacement = getGreatestFromLeftSubtree(node, indexOfDeletedElement, false);
+                        if (replacement != null) {
+                            node.addVal(indexOfDeletedElement, replacement);
+                            // node.getElements()[indexOfDeletedElement] = getGreatestFromLeftSubtree(node, indexOfDeletedElement);
                             // replace empty place of node with smallest element of its right sub tree
-                        } else if (getSmallestFromRightSubtree(node, indexOfDeletedElement) != null) {
-                            node.addVal(indexOfDeletedElement, getSmallestFromRightSubtree(node, indexOfDeletedElement));
-//                            node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
                         } else {
-                            // Situationen wo sich die Höhe des Baumes ändert  
+                            replacement = getSmallestFromRightSubtree(node, indexOfDeletedElement, false);
+                            if (replacement != null) {
+                                node.addVal(indexOfDeletedElement, replacement);
+                                // node.getElements()[indexOfDeletedElement] = getSmallestFromRightSubtree(node, indexOfDeletedElement);
+                            } else {
+                                node.addVal(indexOfDeletedElement, getGreatestFromLeftSubtree(node, indexOfDeletedElement, true));
+
+                                // the leaf with replacement has a underflow now -> you have to correct it
+                                node = node.getReferences()[indexOfDeletedElement];
+                                while(node.hasReferences())
+                                    node = node.getReferences()[node.getNumberOfElements()];
+                            }
                         }
+
                     } else {
                         // node is leaf
 
@@ -187,78 +250,85 @@ public class BTree implements BTreeInterface {
                         for (int j = indexOfDeletedElement; j < node.getElements().length - 2; j++)
                             node.getElements()[j] = node.getElements()[j+1];
 
-                        BTreeNode parent = getParentOf(node);
-                        BTreeNode leftSibling = null;
-                        BTreeNode rightSibling = null;
-                        int childIndex = 0;
-                        while (parent.getReferences()[childIndex] != node)
-                            childIndex++;
+                        if (checkUnderflow(node)) {
+                            BTreeNode parent = getParentOf(node);
+                            BTreeNode leftSibling = null;
+                            BTreeNode rightSibling = null;
+                            int childIndex = 0;
+                            while (parent.getReferences()[childIndex] != node)
+                                childIndex++;
 
-                        if (childIndex > 0)
-                            leftSibling = parent.getReferences()[childIndex - 1];
+                            if (childIndex > 0)
+                                leftSibling = parent.getReferences()[childIndex - 1];
 
-                        if (childIndex < parent.getReferences().length - 1)
-                            rightSibling = parent.getReferences()[childIndex + 1];
+                            if (childIndex < parent.getReferences().length - 1)
+                                rightSibling = parent.getReferences()[childIndex + 1];
 
-                        // push greatest element of left sibling up to parent
-                        // and push parent element down to correct underflow of node
-                        if (leftSibling != null && leftSibling.getNumberOfElements() > degree) {
-                            Comparable newValForNode = parent.getElements()[childIndex - 1];
-                            Comparable newValForParent = leftSibling.getMax();
-
-                            parent.getElements()[childIndex - 1] = newValForParent;
-                            node.addVal(0, newValForNode);
-                            leftSibling.getElements()[leftSibling.getNumberOfElements() - 1] = null;
-                            this.size--;
-                            break; // no other underflow possible
-
-                            // push smallest element of right sibling up to parent
+                            // push greatest element of left sibling up to parent
                             // and push parent element down to correct underflow of node
-                        } else if (rightSibling != null && rightSibling.getNumberOfElements() > degree) {
-                            Comparable newValForNode = parent.getElements()[childIndex];
-                            Comparable newValForParent = rightSibling.getMin();
+                            if (leftSibling != null && leftSibling.getNumberOfElements() > degree) {
+                                Comparable newValForNode = parent.getElements()[childIndex - 1];
+                                Comparable newValForParent = leftSibling.getMax();
 
-                            parent.getElements()[childIndex] = newValForParent;
-                            node.addVal(node.getNumberOfElements(), newValForNode);
-                            for (int j = 0; j < rightSibling.getNumberOfElements(); j++)
-                                rightSibling.getElements()[j] = rightSibling.getElements()[j+1];
-                            this.size--;
-                            break; // no other underflow possible;
+                                parent.getElements()[childIndex - 1] = newValForParent;
+                                node.addVal(0, newValForNode);
+                                leftSibling.getElements()[leftSibling.getNumberOfElements() - 1] = null;
+                                this.size--;
+                                break; // no other underflow possible
 
-                        } else {
-                            // right or left sibling or both of them have minimum number of elements
-                            // push parent element down and merge specified children
-//                            if (parent.getNumberOfElements() > degree) {
-                                if (leftSibling != null) {
-                                    Comparable parentElementOfleftSiblingAndNode = parent.getElements()[childIndex - 1];
-                                    indexOfDeletedElement = childIndex - 1;
-                                    leftSibling.addVal(leftSibling.getNumberOfElements(), parentElementOfleftSiblingAndNode);
-                                    BTreeNode newChild = mergeLeaf(leftSibling, node);
-                                    for (int j = childIndex - 1; j < parent.getElements().length-2; j++) {
-                                        parent.getElements()[j] = parent.getElements()[j+1];
-                                        parent.getReferences()[j+1] = parent.getReferences()[j+2];
+                                // push smallest element of right sibling up to parent
+                                // and push parent element down to correct underflow of node
+                            } else if (rightSibling != null && rightSibling.getNumberOfElements() > degree) {
+                                Comparable newValForNode = parent.getElements()[childIndex];
+                                Comparable newValForParent = rightSibling.getMin();
+
+                                parent.getElements()[childIndex] = newValForParent;
+                                node.addVal(node.getNumberOfElements(), newValForNode);
+                                for (int j = 0; j < rightSibling.getNumberOfElements(); j++)
+                                    rightSibling.getElements()[j] = rightSibling.getElements()[j+1];
+                                this.size--;
+                                break; // no other underflow possible;
+
+                            } else {
+                                // right or left sibling or both of them have minimum number of elements
+                                // push parent element down and merge specified children
+                                if (parent.getNumberOfElements() > degree) {
+                                    if (leftSibling != null) {
+                                        Comparable parentElementOfleftSiblingAndNode = parent.getElements()[childIndex - 1];
+                                        indexOfDeletedElement = childIndex - 1;
+                                        leftSibling.addVal(leftSibling.getNumberOfElements(), parentElementOfleftSiblingAndNode);
+                                        BTreeNode newChild = mergeLeaf(leftSibling, node);
+                                        for (int j = childIndex - 1; j < parent.getElements().length-2; j++) {
+                                            parent.getElements()[j] = parent.getElements()[j+1];
+                                            parent.getReferences()[j+1] = parent.getReferences()[j+2];
+                                        }
+                                        parent.getReferences()[childIndex - 1] = newChild;
+                                    } else {
+                                        Comparable parentElementOfrightSiblingAndNode = parent.getElements()[childIndex];
+                                        indexOfDeletedElement = childIndex;
+                                        node.addVal(node.getNumberOfElements(), parentElementOfrightSiblingAndNode);
+                                        BTreeNode newChild = mergeLeaf(node, rightSibling);
+                                        for (int j = childIndex; j < parent.getElements().length-2; j++) {
+                                            parent.getElements()[j] = parent.getElements()[j+1];
+                                            parent.getReferences()[j+1] = parent.getReferences()[j+2];
+                                        }
+                                        parent.getReferences()[childIndex] = newChild;
                                     }
-                                    parent.getReferences()[childIndex - 1] = newChild;
+
+                                    node = parent;
                                 } else {
-                                    Comparable parentElementOfrightSiblingAndNode = parent.getElements()[childIndex];
-                                    indexOfDeletedElement = childIndex;
-                                    node.addVal(node.getNumberOfElements(), parentElementOfrightSiblingAndNode);
-                                    BTreeNode newChild = mergeLeaf(node, rightSibling);
-                                    for (int j = childIndex; j < parent.getElements().length-2; j++) {
-                                        parent.getElements()[j] = parent.getElements()[j+1];
-                                        parent.getReferences()[j+1] = parent.getReferences()[j+2];
-                                    }
-                                    parent.getReferences()[childIndex] = newChild;
+                                    println("Sorry. Cannot correct anymore");
+                                    break;
+                                    // root Wert reinpacken
+                                    // Situationen wo sich die Höhe des Baumes ändert
                                 }
-                                
-                                node = parent;
-//                            } else {
-//                                // Situationen wo sich die Höhe des Baumes ändert
-//                            }
+                            }
+                        } else {
+                            break; // no problem
                         }
                     }
                 }
-            }
+            } while (checkUnderflow(node));
             return true;
         }
     }
@@ -305,32 +375,48 @@ public class BTree implements BTreeInterface {
             return false;
     }
 
-    private Comparable getSmallestFromRightSubtree(BTreeNode subRoot, int indexOfElement) {
+    private Comparable getSmallestFromRightSubtree(BTreeNode subRoot, int indexOfElement, boolean riskUnderflow) {
         BTreeNode node = subRoot.getReferences()[indexOfElement + 1];
         while (node.hasReferences())
             node = node.getReferences()[0];
 
-        if (node.getNumberOfElements() > degree) {
+        if (!riskUnderflow) {
+            if (node.getNumberOfElements() > degree) {
+                Comparable valForReplacement = node.getMin();
+                for (int i = 0; i < node.getNumberOfElements(); i++)
+                    node.getElements()[i] = node.getElements()[i+1];
+                node.getElements()[node.getNumberOfElements() - 1] = null;
+                return valForReplacement;
+            } else {
+                return null;
+            }
+        } else {
             Comparable valForReplacement = node.getMin();
             for (int i = 0; i < node.getNumberOfElements(); i++)
                 node.getElements()[i] = node.getElements()[i+1];
+            node.getElements()[node.getNumberOfElements() - 1] = null;
             return valForReplacement;
-        } else {
-            return null;
+
         }
     }
 
-    private Comparable getGreatestFromLeftSubtree(BTreeNode subRoot, int indexOfElement) {
+    private Comparable getGreatestFromLeftSubtree(BTreeNode subRoot, int indexOfElement, boolean riskUnderflow) {
         BTreeNode node = subRoot.getReferences()[indexOfElement];
         while(node.hasReferences())
             node = node.getReferences()[node.getNumberOfElements()];
         
-        if (node.getNumberOfElements() > degree) {
+        if (!riskUnderflow) {
+            if (node.getNumberOfElements() > degree) {
+                Comparable valForReplacement = node.getMax();
+                node.getElements()[node.getNumberOfElements() - 1] = null;
+                return valForReplacement;
+            } else {
+                return null;
+            }
+        } else {
             Comparable valForReplacement = node.getMax();
             node.getElements()[node.getNumberOfElements() - 1] = null;
             return valForReplacement;
-        } else {
-            return null;
         }
     }
 
@@ -692,7 +778,7 @@ public class BTree implements BTreeInterface {
             i++;
         }
 
-        clone.className = this.root.getClass().getSimpleName();
+        clone.className = this.className;
         clone.height = this.height();
         clone.degree = this.degree;
         clone.max = this.getMax();
