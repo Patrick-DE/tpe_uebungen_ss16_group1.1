@@ -1,0 +1,5 @@
+TPE Aufgabe 2 	Gruppe 1.1					05.05.2016
+
+Die Vorteile des zweiten Lösungsansatzes sind, dass die Lösung flexibler ist. 
+So lässt sich viel leichter ein neues Eis oder eine neue Eisdiele hinzufügen. 
+Dies ist durch die Klassenhierarchie möglich. Auch lassen sich leichter Änderungen an Methoden vornehmen, ohne dass große Teile des Codes verändert werden müssen.
