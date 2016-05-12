@@ -32,4 +32,9 @@ public interface Plane {
 	public void flyNextKilometer(int additionalHeight) throws GeneralFlightSimulatorException;
 	
 	public void print();
+	public void run(String weg);
+	public int getAktuellehöhe();
+	public int getGeflogeneKilometer();
+	void landen();
+	
 }
