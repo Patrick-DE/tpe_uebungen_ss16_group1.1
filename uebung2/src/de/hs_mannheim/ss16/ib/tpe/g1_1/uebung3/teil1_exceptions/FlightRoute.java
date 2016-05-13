@@ -7,9 +7,12 @@ public class FlightRoute {
 	private int maxhöhe = 0;
 	
 	FlightRoute(int kilometer, int minhöhe, int maxhöhe){
-		this.kilometer = kilometer;
-		this.minhöhe = minhöhe;
-		this.maxhöhe = maxhöhe;
+		setKilometer(kilometer);
+		setMinhöhe(minhöhe);
+		setMaxhöhe(maxhöhe);
+//		this.kilometer = kilometer;
+//		this.minhöhe = minhöhe;
+//		this.maxhöhe = maxhöhe;
 	}
 	
 	public int getKilometer() {
