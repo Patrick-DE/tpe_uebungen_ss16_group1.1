@@ -1,4 +1,4 @@
-package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung3.teil1_exceptions;
+package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung3.aufgabe1;
 
 public class FlightRoute {
 
