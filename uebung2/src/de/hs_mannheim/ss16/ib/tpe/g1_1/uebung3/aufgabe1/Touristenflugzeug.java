@@ -45,10 +45,12 @@ public class Touristenflugzeug implements Plane {
 				run=true;
 				System.out.println("Die Simulation der Strecke "+weg+" wurde ausgewählt.");
 			}else{
-				System.out.println("Bitte geben Sie eine gültige Strecke ein!");
+				throw new GeneralFlightSimulatorException("Bitte geben Sie eine gültige Strecke ein!");
+//				System.out.println("Bitte geben Sie eine gültige Strecke ein!");
 			}
 		}else{
-			System.out.println("Die Simulation läuft schon!");
+			throw new GeneralFlightSimulatorException("Die Simulation läuft schon!");
+//			System.out.println("Die Simulation läuft schon!");
 		}
 	}
 
@@ -58,7 +60,7 @@ public class Touristenflugzeug implements Plane {
 			türOffen = true;
 			System.out.println("Sie haben die Tür geöffnet!");
 		}else{
-			new GeneralFlightSimulatorException ("Sie sind in der Luft die Türen können nicht geöffnet werden!");
+			throw new GeneralFlightSimulatorException ("Sie sind in der Luft die Türen können nicht geöffnet werden!");
 		}
 		
 	}
@@ -66,7 +68,8 @@ public class Touristenflugzeug implements Plane {
 	@Override
 	public void closeDoors() {
 		if(türOffen==false){
-			System.out.println("Die Tür ist nicht offen.");
+			throw new GeneralFlightSimulatorException ("Die Tür ist nicht offen.");
+//			System.out.println("Die Tür ist nicht offen.");
 		}else{
 			System.out.println("Sie haben die Tür geschlossen.");
 			türOffen = false;
@@ -81,9 +84,9 @@ public class Touristenflugzeug implements Plane {
 			System.out.println("Wir werden nun landen!");
 			inDerLuft = false;
 		}else if(geflogeneKilometer == 0 || stillStehen==true){
-			new GeneralFlightSimulatorException ("Sie sind noch nicht losgeflogen!");
+			throw new GeneralFlightSimulatorException ("Sie sind noch nicht losgeflogen!");
 		}else{
-			new GeneralFlightSimulatorException ("Sie können hier nicht landen!");
+			throw new GeneralFlightSimulatorException ("Sie können hier nicht landen!");
 		}
 	}
 	
@@ -93,7 +96,7 @@ public class Touristenflugzeug implements Plane {
 			System.out.println("Das Flugzeug wurde nun geparkt.");
 			stillStehen = true;
 		}else{
-			new GeneralFlightSimulatorException ("Sie müssen erst landen und parken um Stoppen zu können!");
+			throw new GeneralFlightSimulatorException ("Sie müssen erst landen und parken um Stoppen zu können!");
 		}
 	}
 
@@ -113,14 +116,14 @@ public class Touristenflugzeug implements Plane {
 						System.out.println("Sie befinden sich nun auf Kilometerstand "+ geflogeneKilometer +".");
 						System.out.println("Sie haben noch "+ rest +" Kilometer zu fliegen.");	
 					}else{
-						new GeneralFlightSimulatorException ("Die eingegebenen Höhe würde zu einem Crash oder zu einer Überschreitung der Maximalhöhe führen!");
+						throw new GeneralFlightSimulatorException ("Die eingegebenen Höhe würde zu einem Crash oder zu einer Überschreitung der Maximalhöhe führen!");
 					}	
 				}else if(aktuellehöhe < newRoute.getMinhöhe()){
-					System.out.println("Sie müssen erst steigen, da sie ab 2 KM entfernung eine Mindesthöhe von "+ newRoute.getMinhöhe()+" einhalten müssen!");
+					throw new GeneralFlightSimulatorException ("Sie müssen erst steigen, da sie ab 2 KM entfernung eine Mindesthöhe von "+ newRoute.getMinhöhe()+" einhalten müssen!");
 				}
 			}
 		}else{
-			new GeneralFlightSimulatorException ("Sie sind in der Luft die Türen können nicht geöffnet werden!"); 
+			throw new GeneralFlightSimulatorException ("Sie sind in der Luft die Türen können nicht geöffnet werden!"); 
 		}
 	}
 

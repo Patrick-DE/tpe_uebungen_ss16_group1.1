@@ -8,14 +8,14 @@ public class Main {
 	static Plane newPlane;
 	static Scanner scanner = new Scanner(System.in);
 	
-	public static void main(String[] args) throws GeneralFlightSimulatorException {
+	public static void main(String[] args){
 		while (true){
 			makeMenu();
 		}
 
 	}
 
-	private static void makeMenu() throws GeneralFlightSimulatorException {
+	private static void makeMenu(){
 
 		System.out.println("---- Menü ----");
 		System.out.println("1: Run");
@@ -39,22 +39,22 @@ public class Main {
 		case 2:
 			try{
 				newPlane.stop();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+			}catch(GeneralFlightSimulatorException e){
+				System.out.println("Sie haben die Simulation noch nicht gestartet!");
 			}
 			break;
 		case 10:
 			try{
 				newPlane.openDoors();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+			}catch(GeneralFlightSimulatorException e){
+				System.out.println("Sie haben die Simulation noch nicht gestartet!");
 			}
 			break;
 		case 11:
 			try{
 				newPlane.closeDoors();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+			}catch(GeneralFlightSimulatorException e){
+				System.out.println("Sie haben die Simulation noch nicht gestartet!");
 			}
 			break;
 		case 12:
@@ -63,15 +63,15 @@ public class Main {
 				System.out.println("Wie hoch möchten Sie fliegen?");
 				int additionalHeight = scanner.nextInt();
 				newPlane.flyNextKilometer(additionalHeight);
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch  nicht gestartet!");
+			}catch(GeneralFlightSimulatorException e){
+				System.out.println("Sie haben die Simulation noch  nicht gestartet!");
 			}
 			break;
 		case 13:
 			try{
 				newPlane.landen();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+			}catch(GeneralFlightSimulatorException e){
+				System.out.println("Sie haben die Simulation noch nicht gestartet!");
 			}
 			break;
 		case 90:
@@ -81,8 +81,7 @@ public class Main {
 			System.exit( 0 );
 			break;
 		default:
-			System.out.println("Ihre Auswahl war leider nicht gültig.");
-			break;
+			throw new GeneralFlightSimulatorException("Auswahl war leider nicht gültig.");
 		}
 
 	}
