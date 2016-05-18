@@ -33,7 +33,7 @@ public interface Plane {
 	
 	public void print();
 	public void run(String weg);
-	public int getAktuellehöhe();
+	public int getAktuellehoehe();
 	public int getGeflogeneKilometer();
 	void landen();
 	

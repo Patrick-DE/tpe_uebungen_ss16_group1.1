@@ -2,20 +2,24 @@ package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung3.aufgabe1;
 
 import java.util.Scanner;
 
-import sun.security.action.GetBooleanAction;
-
 public class Main {
 	static Plane newPlane;
 	static Scanner scanner = new Scanner(System.in);
 	
 	public static void main(String[] args){
 		while (true){
-			makeMenu();
+			try {
+				new Main().makeMenu();
+			} catch (Exception e) {
+
+				System.out.println("nobody cares about exceptions");
+				e.printStackTrace();
+			}
 		}
 
 	}
 
-	private static void makeMenu(){
+	private void makeMenu() throws Exception{
 
 		System.out.println("---- Menü ----");
 		System.out.println("1: Run");
@@ -59,7 +63,7 @@ public class Main {
 			break;
 		case 12:
 			try{
-				System.out.println("Ihre aktuelle Höhe ist: "+ newPlane.getAktuellehöhe()+".");
+				System.out.println("Ihre aktuelle Höhe ist: "+ newPlane.getAktuellehoehe()+".");
 				System.out.println("Wie hoch möchten Sie fliegen?");
 				int additionalHeight = scanner.nextInt();
 				newPlane.flyNextKilometer(additionalHeight);

@@ -3,16 +3,16 @@ package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung3.aufgabe1;
 public class FlightRoute {
 
 	private int kilometer = 0;
-	private int minhöhe = 0;
-	private int maxhöhe = 0;
+	private int minhoehe = 0;
+	private int maxhoehe = 0;
 	
-	FlightRoute(int kilometer, int minhöhe, int maxhöhe){
+	FlightRoute(int kilometer, int minhoehe, int maxhoehe){
 		setKilometer(kilometer);
-		setMinhöhe(minhöhe);
-		setMaxhöhe(maxhöhe);
+		setMinhoehe(minhoehe);
+		setMaxhoehe(maxhoehe);
 //		this.kilometer = kilometer;
-//		this.minhöhe = minhöhe;
-//		this.maxhöhe = maxhöhe;
+//		this.minhoehe = minhoehe;
+//		this.maxhoehe = maxhoehe;
 	}
 	
 	public int getKilometer() {
@@ -21,16 +21,16 @@ public class FlightRoute {
 	public void setKilometer(int kilometer) {
 		this.kilometer = kilometer;
 	}
-	public int getMinhöhe() {
-		return minhöhe;
+	public int getMinhoehe() {
+		return minhoehe;
 	}
-	public void setMinhöhe(int minhöhe) {
-		this.minhöhe = minhöhe;
+	public void setMinhoehe(int minhoehe) {
+		this.minhoehe = minhoehe;
 	}
-	public int getMaxhöhe() {
-		return maxhöhe;
+	public int getMaxhoehe() {
+		return maxhoehe;
 	}
-	public void setMaxhöhe(int maxhöhe) {
-		this.maxhöhe = maxhöhe;
+	public void setMaxhoehe(int maxhoehe) {
+		this.maxhoehe = maxhoehe;
 	}
 }
