@@ -1,18 +1,17 @@
 package flugzeugSimulatorSimon;
 
-import java.io.IOException;
 
 public class FlightRoute {
 
 	private int kilometer = 0;
-	private int minhöhe = 0;
-	private int maxhöhe = 0;
+	private int minHeight = 0;
+	private int maxHeight = 0;
 	
-	FlightRoute(int kilometer, int minhöhe, int maxhöhe) {
+	FlightRoute(int kilometer, int minHeight, int maxHeight) {
 		try{
 		setKilometer(kilometer);
-		setMaxhöhe(maxhöhe);
-		setMinhöhe(minhöhe);
+		setmaxHeight(maxHeight);
+		setminHeight(minHeight);
 		}
 		catch(SimulatorConfigurationException a){
 			System.out.println("An error occured!");
@@ -36,27 +35,27 @@ public class FlightRoute {
 	}
 		
 
-	public int getMinhöhe() {
-		return minhöhe;
+	public int getminHeight() {
+		return minHeight;
 	}
-	public void setMinhöhe(int minhöhe) throws SimulatorConfigurationException {
-		if(minhöhe > getMaxhöhe() || minhöhe <= 0 ){
+	public void setminHeight(int minHeight) throws SimulatorConfigurationException {
+		if(minHeight > getmaxHeight() || minHeight <= 0 ){
 			throw new SimulatorConfigurationException();
 		}
 		else{
-			this.minhöhe = minhöhe;
+			this.minHeight = minHeight;
 		}
 		
 	}
-	public int getMaxhöhe() {
-		return maxhöhe;
+	public int getmaxHeight() {
+		return maxHeight;
 	}
-	public void setMaxhöhe(int maxhöhe)throws SimulatorConfigurationException  {
-		if(maxhöhe <= 0){
+	public void setmaxHeight(int maxHeight)throws SimulatorConfigurationException  {
+		if(maxHeight <= 0){
 			throw new SimulatorConfigurationException();
 		}
 		else{
-			this.maxhöhe = maxhöhe;
+			this.maxHeight = maxHeight;
 		}
 	}
 }

@@ -13,7 +13,7 @@ public interface Plane {
 	*/
 	public void closeDoors();
 	/**
-	* Stops the airplan when it moves on ground.
+	* Stops the airplane when it moves on ground.
 	* @throws GeneralFlightSimulatorException
 	* If the airplane is in the air
 	*/
@@ -32,7 +32,7 @@ public interface Plane {
 	public void flyNextKilometer(int additionalHeight) throws GeneralFlightSimulatorException;
 	
 	public void print();
-	public int getAktuellehöhe();
-	public int getGeflogeneKilometer();
+	public int getheight();
+	public int getcoveredDistance();
 	
 }

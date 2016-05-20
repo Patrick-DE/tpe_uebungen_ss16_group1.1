@@ -1,9 +1,8 @@
 package flugzeugSimulatorSimon;
 
-import java.io.IOException;
+
 import java.util.Scanner;
 
-import sun.security.action.GetBooleanAction;
 
 public class Main {
 	static Plane newPlane;
@@ -69,7 +68,7 @@ public class Main {
 			System.out.println("What is the maximum height?");
 			int maxHeight = scanner.nextInt();
 			route = new FlightRoute(distance,minHeight,maxHeight);
-			newPlane = new Touristenflugzeug(0, false, false, true, false, 0,route);
+			newPlane = new Touristenflugzeug(0, false, false, true, 0,route);
 			break;
 		case 2:
 			try{
@@ -86,12 +85,12 @@ public class Main {
 			break;
 
 		case 3:
-			while((newPlane.getAktuellehöhe()/100-(route.getKilometer()-newPlane.getGeflogeneKilometer()) )!= 0){
+			while((newPlane.getheight()/100-(route.getKilometer()-newPlane.getcoveredDistance()) )!= 0){
 				try{
-					if(newPlane.getAktuellehöhe() < route.getMaxhöhe() && route.getMaxhöhe() - newPlane.getAktuellehöhe() >= 100)
+					if(newPlane.getheight() < route.getmaxHeight() && route.getmaxHeight() - newPlane.getheight() >= 100)
 						newPlane.flyNextKilometer(100);
-					else if(newPlane.getAktuellehöhe() <= route.getMaxhöhe() && route.getMaxhöhe() - newPlane.getAktuellehöhe() < 100)
-						newPlane.flyNextKilometer(route.getMaxhöhe() - newPlane.getAktuellehöhe());
+					else if(newPlane.getheight() <= route.getmaxHeight() && route.getmaxHeight() - newPlane.getheight() < 100)
+						newPlane.flyNextKilometer(route.getmaxHeight() - newPlane.getheight());
 				}
 				catch(NullPointerException|GeneralFlightSimulatorException x){
 					exceptionThrown = true;
@@ -111,7 +110,7 @@ public class Main {
 				}
 			}
 
-			while(newPlane.getAktuellehöhe() > 0){
+			while(newPlane.getheight() > 0){
 				try{
 					newPlane.flyNextKilometer(-100);
 				}

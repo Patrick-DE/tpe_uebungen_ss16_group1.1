@@ -3,11 +3,11 @@ package flugzeugSimulatorSimon;
 public class properSimulation {
 	public static void main(String[] args){
 		FlightRoute mine = new FlightRoute(500,100,2000);
-		Plane Boeing = new Touristenflugzeug(0, false, false, true, false, 0,mine);
+		Plane Boeing = new Touristenflugzeug(0, false, false, true, 0,mine);
 		Boeing.closeDoors();
-		while((Boeing.getAktuellehöhe()/100-(mine.getKilometer()-Boeing.getGeflogeneKilometer()) != 0)){
+		while((Boeing.getheight()/100-(mine.getKilometer()-Boeing.getcoveredDistance()) != 0)){
 			try{
-				if(Boeing.getAktuellehöhe() < mine.getMaxhöhe())
+				if(Boeing.getheight() < mine.getmaxHeight())
 					Boeing.flyNextKilometer(100);
 				else
 					Boeing.flyNextKilometer(0);
@@ -17,7 +17,7 @@ public class properSimulation {
 				break;
 			}
 		}
-		while(Boeing.getAktuellehöhe() > 0){
+		while(Boeing.getheight() > 0){
 			try{
 				Boeing.flyNextKilometer(-100);
 			}

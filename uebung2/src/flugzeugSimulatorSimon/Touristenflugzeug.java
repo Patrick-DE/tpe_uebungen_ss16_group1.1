@@ -1,59 +1,57 @@
 package flugzeugSimulatorSimon;
 
 public class Touristenflugzeug implements Plane {
-	private int geflogeneKilometer = 0;
-	private int aktuellehöhe= 0;
-	private boolean inDerLuft= false;
-	private boolean türOffen= false;
-	private boolean stillStehen= true;
-	private boolean run=false;
+	private int coveredDistance = 0;
+	private int height = 0;
+	private boolean midAir = false;
+	private boolean doorOpen = false;
+	private boolean standingStill = true;
 	static FlightRoute newRoute;
 
-	public Touristenflugzeug(int geflogeneKilometer, boolean inDerLuft, boolean türOffen, boolean stillStehen, boolean run, int aktuellehöhe,FlightRoute route) {
-		this.geflogeneKilometer = geflogeneKilometer;
-		this.inDerLuft = inDerLuft;
-		this.türOffen = türOffen;
-		this.stillStehen = stillStehen;
-		this.run = run;
-		this.aktuellehöhe = aktuellehöhe;
+	public Touristenflugzeug(int coveredDistance, boolean midAir, boolean doorOpen, boolean standingStill, int height,FlightRoute route) {
+		this.coveredDistance = coveredDistance;
+		this.midAir = midAir;
+		this.doorOpen = doorOpen;
+		this.standingStill = standingStill;
+
+		this.height = height;
 		this.newRoute = route;
 	}
 
 	public void print(){
-		System.out.println("geflogeneKilometer " + this.geflogeneKilometer);
-		System.out.println("inDerLuft " + this.inDerLuft);
-		System.out.println("türOffen " + this.türOffen);
-		System.out.println("stillStehen " + this.stillStehen);
-		System.out.println("running " + this.run);
-		System.out.println("aktuellehöhe " + this.aktuellehöhe);
+		System.out.println("coveredDistance " + this.coveredDistance);
+		System.out.println("midAir " + this.midAir);
+		System.out.println("doorOpen " + this.doorOpen);
+		System.out.println("standingStill " + this.standingStill);
+		System.out.println("height " + this.height);
 	}
-	public int getGeflogeneKilometer() {
-		return geflogeneKilometer;
+	public int getcoveredDistance() {
+		return coveredDistance;
 	}
 
-	public int getAktuellehöhe() {
-		return aktuellehöhe;
+	public int getheight() {
+		return height;
 	}
 
 
 	@Override
 	public void openDoors() throws GeneralFlightSimulatorException {
-		if(inDerLuft==false && stillStehen==true && türOffen== false){
-			türOffen = true;
-			System.out.println("Sie haben die Tür geöffnet!");
+		if(midAir==false && standingStill==true && doorOpen== false){
+			doorOpen = true;
+			System.out.println("You have opened the doors!");
 		}else{
-			new GeneralFlightSimulatorException ("Sie sind in der Luft die Türen können nicht geöffnet werden!");
+			new GeneralFlightSimulatorException ("The doors can not be openend mid-air!");
 		}
 
 	}
 
 	@Override
 	public void closeDoors() {
-		if(!türOffen){
-			System.out.println("Die Tür ist nicht offen.");
+		if(!doorOpen){
+			System.out.println("The doors are already closed.");
 		}else{
-			System.out.println("Sie haben die Tür geschlossen.");
-			türOffen = false;
+			System.out.println("You have closed the doors.");
+			doorOpen = false;
 		}
 
 
@@ -63,54 +61,54 @@ public class Touristenflugzeug implements Plane {
 
 	@Override
 	public void stop() throws GeneralFlightSimulatorException {
-		if(!stillStehen && !inDerLuft){
-			System.out.println("Das Flugzeug wurde nun geparkt.");
-			stillStehen = true;
+		if(!standingStill && !midAir){
+			System.out.println("The plane has now stopped.");
+			standingStill = true;
 		}else{
-			throw new GeneralFlightSimulatorException ("Sie müssen erst landen und parken um Stoppen zu können!");
+			throw new GeneralFlightSimulatorException ("You have to land first before you can stop the plane!");
 		}
 	}
 
 	@Override
 	public void flyNextKilometer(int additionalHeight) throws GeneralFlightSimulatorException {
-		inDerLuft = true;
-		stillStehen = false;
+		midAir = true;
+		standingStill = false;
 		if(additionalHeight > 100 || additionalHeight < -100){
-			throw new GeneralFlightSimulatorException("Plane can't not rise more than 100 m every kilometer");
+			throw new GeneralFlightSimulatorException("Plane can't ascend more than 100 m every kilometer");
 
 		}
 		else{
-			if(!türOffen && geflogeneKilometer < 2){
-				if(geflogeneKilometer == 1 && additionalHeight < (newRoute.getMinhöhe()-aktuellehöhe)){
+			if(!doorOpen && coveredDistance < 2){
+				if(coveredDistance == 1 && additionalHeight < (newRoute.getminHeight()-height)){
 					throw new GeneralFlightSimulatorException("Plane must surpass minimum height after flying two kilometers");
 				}
-				else if(aktuellehöhe + additionalHeight > newRoute.getMaxhöhe()){
-					throw new PlaneTooHighException(aktuellehöhe);
+				else if(height + additionalHeight > newRoute.getmaxHeight()){
+					throw new PlaneTooHighException(height);
 				}
-				aktuellehöhe = aktuellehöhe + additionalHeight;
-				geflogeneKilometer++;
+				height = height + additionalHeight;
+				coveredDistance++;
 
 			}
-			else if(!türOffen && geflogeneKilometer >= 2 && geflogeneKilometer >= newRoute.getKilometer()-2 ){
-				if(aktuellehöhe > newRoute.getMaxhöhe()){
-					throw new PlaneTooHighException(aktuellehöhe);
+			else if(!doorOpen && coveredDistance >= 2 && coveredDistance >= newRoute.getKilometer()-2 ){
+				if(height > newRoute.getmaxHeight()){
+					throw new PlaneTooHighException(height);
 				}
-				aktuellehöhe = aktuellehöhe + additionalHeight;
-				geflogeneKilometer++;
+				height = height + additionalHeight;
+				coveredDistance++;
 
 			}
-			else if(!türOffen && geflogeneKilometer >= 2){
-				if(aktuellehöhe + additionalHeight < newRoute.getMinhöhe()){
-					throw new PlaneTooLowException(aktuellehöhe);
+			else if(!doorOpen && coveredDistance >= 2){
+				if(height + additionalHeight < newRoute.getminHeight()){
+					throw new PlaneTooLowException(height);
 				}
-				else if(aktuellehöhe + additionalHeight > newRoute.getMaxhöhe()){
-					throw new PlaneTooHighException(aktuellehöhe);
+				else if(height + additionalHeight > newRoute.getmaxHeight()){
+					throw new PlaneTooHighException(height);
 				}
-				else if(geflogeneKilometer >= newRoute.getKilometer()){
+				else if(coveredDistance >= newRoute.getKilometer()){
 					throw new GeneralFlightSimulatorException("Plane has already arrived or has already flown over final destination without landing");
 				}
-				aktuellehöhe = aktuellehöhe + additionalHeight;
-				geflogeneKilometer++;
+				height = height + additionalHeight;
+				coveredDistance++;
 			}
 			
 			else{
