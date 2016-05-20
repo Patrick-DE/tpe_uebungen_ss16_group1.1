@@ -13,5 +13,8 @@ public class PlaneTooLowException extends GeneralFlightSimulatorException {
 		System.out.println("The plane is flying " + height +"m high which is below the minimum permissible height");
 		return ""+height;
 	}
+	public String toString(){
+		return "PlaneTooLowException";
+	}
 
 }

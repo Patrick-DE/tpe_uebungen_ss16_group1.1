@@ -17,6 +17,9 @@ public class GeneralFlightSimulatorException extends Exception {
 	public String getMessage(){
 		return message;
 	}
+	public String toString(){
+		return("GeneralFlightSimulatorException");
+	}
 	
 
 }

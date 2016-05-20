@@ -49,7 +49,7 @@ public class Touristenflugzeug implements Plane {
 
 	@Override
 	public void closeDoors() {
-		if(türOffen==false){
+		if(!türOffen){
 			System.out.println("Die Tür ist nicht offen.");
 		}else{
 			System.out.println("Sie haben die Tür geschlossen.");
@@ -63,34 +63,47 @@ public class Touristenflugzeug implements Plane {
 
 	@Override
 	public void stop() throws GeneralFlightSimulatorException {
-		if(stillStehen == false && inDerLuft==false){
+		if(!stillStehen && !inDerLuft){
 			System.out.println("Das Flugzeug wurde nun geparkt.");
 			stillStehen = true;
 		}else{
-			new GeneralFlightSimulatorException ("Sie müssen erst landen und parken um Stoppen zu können!");
+			throw new GeneralFlightSimulatorException ("Sie müssen erst landen und parken um Stoppen zu können!");
 		}
 	}
 
 	@Override
 	public void flyNextKilometer(int additionalHeight) throws GeneralFlightSimulatorException {
+		inDerLuft = true;
+		stillStehen = false;
 		if(additionalHeight > 100 || additionalHeight < -100){
 			throw new GeneralFlightSimulatorException("Plane can't not rise more than 100 m every kilometer");
 
 		}
 		else{
-			if(türOffen==false && geflogeneKilometer < 2){
+			if(!türOffen && geflogeneKilometer < 2){
 				if(geflogeneKilometer == 1 && additionalHeight < (newRoute.getMinhöhe()-aktuellehöhe)){
 					throw new GeneralFlightSimulatorException("Plane must surpass minimum height after flying two kilometers");
+				}
+				else if(aktuellehöhe + additionalHeight > newRoute.getMaxhöhe()){
+					throw new PlaneTooHighException(aktuellehöhe);
+				}
+				aktuellehöhe = aktuellehöhe + additionalHeight;
+				geflogeneKilometer++;
+
+			}
+			else if(!türOffen && geflogeneKilometer >= 2 && geflogeneKilometer >= newRoute.getKilometer()-2 ){
+				if(aktuellehöhe > newRoute.getMaxhöhe()){
+					throw new PlaneTooHighException(aktuellehöhe);
 				}
 				aktuellehöhe = aktuellehöhe + additionalHeight;
 				geflogeneKilometer++;
 
 			}
 			else if(!türOffen && geflogeneKilometer >= 2){
-				if(aktuellehöhe < newRoute.getMinhöhe()){
+				if(aktuellehöhe + additionalHeight < newRoute.getMinhöhe()){
 					throw new PlaneTooLowException(aktuellehöhe);
 				}
-				else if(aktuellehöhe > newRoute.getMaxhöhe()){
+				else if(aktuellehöhe + additionalHeight > newRoute.getMaxhöhe()){
 					throw new PlaneTooHighException(aktuellehöhe);
 				}
 				else if(geflogeneKilometer >= newRoute.getKilometer()){
@@ -99,14 +112,7 @@ public class Touristenflugzeug implements Plane {
 				aktuellehöhe = aktuellehöhe + additionalHeight;
 				geflogeneKilometer++;
 			}
-			else if(!türOffen && geflogeneKilometer >= 2 && geflogeneKilometer == newRoute.getKilometer()-2 ){
-				if(aktuellehöhe > newRoute.getMaxhöhe()){
-					throw new PlaneTooHighException(aktuellehöhe);
-				}
-				aktuellehöhe = aktuellehöhe + additionalHeight;
-				geflogeneKilometer++;
-
-			}
+			
 			else{
 				throw new GeneralFlightSimulatorException("Doors are open. Please close the doors before you try to start flying");
 			}

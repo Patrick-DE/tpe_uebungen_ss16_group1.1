@@ -15,8 +15,8 @@ public class FlightRoute {
 		setMinhöhe(minhöhe);
 		}
 		catch(SimulatorConfigurationException a){
-			System.out.println("An error occured!);
-			System.out.println("Reason "a.getMessage());
+			System.out.println("An error occured!");
+			System.out.println("Reason "+ a.getMessage());
 			a.printStackTrace();
 		}
 			

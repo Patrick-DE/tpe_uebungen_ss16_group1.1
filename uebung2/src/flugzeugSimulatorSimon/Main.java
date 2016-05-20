@@ -1,5 +1,6 @@
 package flugzeugSimulatorSimon;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import sun.security.action.GetBooleanAction;
@@ -7,7 +8,12 @@ import sun.security.action.GetBooleanAction;
 public class Main {
 	static Plane newPlane;
 	static Scanner scanner = new Scanner(System.in);
-	
+	static boolean exceptionThrown = false;
+	static String exceptionName;
+	static FlightRoute route;
+	static int successfulSimulations;
+	static int unsuccessfulSimulations;
+
 	public static void main(String[] args) throws GeneralFlightSimulatorException {
 		while (true){
 			makeMenu();
@@ -18,18 +24,25 @@ public class Main {
 	private static void makeMenu() throws GeneralFlightSimulatorException {
 
 		System.out.println("---- Menü ----");
+		System.out.println("0: Start new simulation ");
 		System.out.println("1: Create route and plane ");
-		System.out.println("2: Stop");
-		System.out.println("10: OpenDoors");
-		System.out.println("11: CloseDoors");
-		System.out.println("12: Fly");
-		System.out.println("13: Landen");
+		System.out.println("2: Close doors");
+		System.out.println("3: Fly complete route");
+		System.out.println("10:Fly next kilometer ");
+		System.out.println("11: Stop");
+		System.out.println("12: Open doors");
+		System.out.println("13: Evaluate simulation");
 		System.out.println("90: Print Object");
 		System.out.println("99: Exit");
 
 		int selection = scanner.nextInt();
 
 		switch (selection) {
+		case 0:
+			newPlane = null;
+			exceptionThrown = false;
+			exceptionName = null;
+			route = null;
 		case 1:
 			System.out.println("How far do you want to fly?");
 			int distance = scanner.nextInt();
@@ -37,59 +50,118 @@ public class Main {
 			int minHeight = scanner.nextInt();
 			System.out.println("What is the maximum height?");
 			int maxHeight = scanner.nextInt();
-			FlightRoute route = new FlightRoute(distance,minHeight,maxHeight);
+			route = new FlightRoute(distance,minHeight,maxHeight);
 			newPlane = new Touristenflugzeug(0, false, false, true, false, 0,route);
 			break;
 		case 2:
 			try{
-				newPlane.stop();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+				newPlane.closeDoors();
+			}
+			catch(NullPointerException x){
+				exceptionThrown = true;
+				exceptionName = x.toString();
+				System.out.print(exceptionName);
+
+
+			}
+			break;
+
+		case 3:
+			while((newPlane.getAktuellehöhe()/100-(route.getKilometer()-newPlane.getGeflogeneKilometer()) )!= 0){
+				try{
+					if(newPlane.getAktuellehöhe() < route.getMaxhöhe() && route.getMaxhöhe() - newPlane.getAktuellehöhe() >= 100)
+						newPlane.flyNextKilometer(100);
+					else if(newPlane.getAktuellehöhe() <= route.getMaxhöhe() && route.getMaxhöhe() - newPlane.getAktuellehöhe() < 100)
+						newPlane.flyNextKilometer(route.getMaxhöhe() - newPlane.getAktuellehöhe());
+				}
+				catch(NullPointerException|GeneralFlightSimulatorException x){
+					exceptionThrown = true;
+					exceptionName = x.toString();
+					break;
+
+
+				}
+			}
+
+			while(newPlane.getAktuellehöhe() > 0){
+				try{
+					newPlane.flyNextKilometer(-100);
+				}
+				catch(NullPointerException|GeneralFlightSimulatorException x){
+					exceptionThrown = true;
+					exceptionName = x.toString();
+					break;
+
+
+				}
+
 			}
 			break;
 		case 10:
+			System.out.println("How much do you want the plain to ascend in the course of the next kilometer?");
+			int additionalHeight = scanner.nextInt();
 			try{
-				newPlane.openDoors();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+				newPlane.flyNextKilometer(additionalHeight);
+			}
+			catch(NullPointerException|GeneralFlightSimulatorException x){
+				exceptionThrown = true;
+				exceptionName = x.toString();
+				
+
 			}
 			break;
 		case 11:
 			try{
-				newPlane.closeDoors();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+				newPlane.stop();
+			}
+			catch(NullPointerException|GeneralFlightSimulatorException x){
+				exceptionThrown = true;
+				exceptionName = x.toString();
+				
+
+
 			}
 			break;
 		case 12:
 			try{
-				System.out.println("Ihre aktuelle Höhe ist: "+ newPlane.getAktuellehöhe()+".");
-				System.out.println("Wie hoch möchten Sie fliegen?");
-				int additionalHeight = scanner.nextInt();
-				newPlane.flyNextKilometer(additionalHeight);
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch  nicht gestartet!");
+				newPlane.openDoors();
+			}
+			catch(NullPointerException|GeneralFlightSimulatorException x){
+				exceptionThrown = true;
+				exceptionName = x.toString();
+				System.out.print(exceptionName);
+
+
 			}
 			break;
 		case 13:
-			try{
-				newPlane.landen();
-			}catch(NullPointerException e){
-				new GeneralFlightSimulatorException("Sie haben die Simulation noch nicht gestartet!");
+			if(exceptionThrown){
+				System.out.println("Simulation was unsucessful: " + exceptionName + " was thrown.");
+				unsuccessfulSimulations++;
+			}
+			else{
+				System.out.println("No problems occured");
+				successfulSimulations++;
 			}
 			break;
 		case 90:
 			newPlane.print();
 			break;
 		case 99:
-			System.exit( 0 );
+			System.out.println("Successful Simulations: " + successfulSimulations);
+			System.out.println("Unsuccessful Simulations: " + unsuccessfulSimulations);
+			System.out.println("Are you sure you want to exit the simulation? Enter 1 for yes and 2 for no");
+			int decision = scanner.nextInt();
+			if(decision == 1)
+				System.exit( 0 );
+			else
 			break;
 		default:
-			System.out.println("Ihre Auswahl war leider nicht gültig.");
+			System.out.println("Your selection was invalid.");
 			break;
 		}
 
 	}
-		
+
 }
 
