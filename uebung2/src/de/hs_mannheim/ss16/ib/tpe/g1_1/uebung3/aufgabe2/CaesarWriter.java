@@ -33,7 +33,8 @@ public class CaesarWriter extends FilterWriter {
     
     @Override
     public void write(String str) throws IOException {
-        super.write(encrypt(str));
+        String messageToWrite = encrypt(str);
+        super.write(messageToWrite, 0, messageToWrite.length());
     }
     
     @Override
@@ -59,8 +60,15 @@ public class CaesarWriter extends FilterWriter {
         int l = off + len;
         if (l > cbuf.length)
             l = cbuf.length;
+        
         for (int i = off; i < off + len; i++)
             newStr += cbuf[i];
+        this.write(newStr);
+    }
+    
+    @Override
+    public void write(int c) throws IOException {
+        String newStr = "" + c;
         this.write(newStr);
     }
     
