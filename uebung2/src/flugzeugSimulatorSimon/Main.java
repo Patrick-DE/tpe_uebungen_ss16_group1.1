@@ -216,13 +216,13 @@ public class Main {
 			if(counterGeneralFlightSimulatorException != 0){
 				System.out.println("Occurences of GeneralFlightSimulatorException: " + counterGeneralFlightSimulatorException);
 			}
-			else if(counterPlaneTooHighException != 0){
+			if(counterPlaneTooHighException != 0){
 				System.out.println("Occurences of PlaneTooHighException: " + counterPlaneTooHighException);
 			}
-			else if(counterPlaneTooLowException != 0){
+			if(counterPlaneTooLowException != 0){
 				System.out.println("Occurences of PlaneTooLowException: " + counterPlaneTooHighException);
 			}
-			else if(counterNullPointerException != 0){
+			if(counterNullPointerException != 0){
 				System.out.println("Occurences of NullPointerException: " + counterNullPointerException);
 			}
 			System.out.println("Are you sure you want to exit the simulation? Enter 1 for yes and 2 for no");
