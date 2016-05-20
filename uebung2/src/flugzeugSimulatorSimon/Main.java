@@ -60,6 +60,7 @@ public class Main {
 			exceptionThrown = false;
 			exceptionName = null;
 			route = null;
+			break;
 		case 1:
 			System.out.println("How far do you want to fly?");
 			int distance = scanner.nextInt();
