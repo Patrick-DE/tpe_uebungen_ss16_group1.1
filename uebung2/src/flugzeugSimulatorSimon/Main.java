@@ -13,12 +13,29 @@ public class Main {
 	static FlightRoute route;
 	static int successfulSimulations;
 	static int unsuccessfulSimulations;
-
+	static int counterGeneralFlightSimulatorException;
+	static int counterPlaneTooHighException;
+	static int counterPlaneTooLowException;
+	static int counterNullPointerException;
+	
 	public static void main(String[] args) throws GeneralFlightSimulatorException {
 		while (true){
 			makeMenu();
 		}
 
+	}
+	public static boolean equals(String x,String y){
+		boolean equals = true;
+		if(x.length() != y.length())
+			equals = false;
+		else{
+			for(int i = 0; i < x.length(); i++){
+				if(x.charAt(i) != y.charAt(i))
+					equals = false;
+			}
+		}
+		return equals;
+		
 	}
 
 	private static void makeMenu() throws GeneralFlightSimulatorException {
@@ -61,6 +78,7 @@ public class Main {
 				exceptionThrown = true;
 				exceptionName = x.toString();
 				System.out.print(exceptionName);
+				counterNullPointerException++;
 
 
 			}
@@ -77,6 +95,15 @@ public class Main {
 				catch(NullPointerException|GeneralFlightSimulatorException x){
 					exceptionThrown = true;
 					exceptionName = x.toString();
+					if(equals(exceptionName,"GeneralFlightSimulatorException"))
+						counterGeneralFlightSimulatorException++;
+					else if(equals(exceptionName,"PlaneTooHighException"))
+						counterPlaneTooHighException++;
+					else if(equals(exceptionName,"PlaneTooLowException"))
+						counterPlaneTooLowException++;
+					else{
+						counterNullPointerException++;
+					}
 					break;
 
 
@@ -90,6 +117,15 @@ public class Main {
 				catch(NullPointerException|GeneralFlightSimulatorException x){
 					exceptionThrown = true;
 					exceptionName = x.toString();
+					if(equals(exceptionName,"GeneralFlightSimulatorException"))
+						counterGeneralFlightSimulatorException++;
+					else if(equals(exceptionName,"PlaneTooHighException"))
+						counterPlaneTooHighException++;
+					else if(equals(exceptionName,"PlaneTooLowException"))
+						counterPlaneTooLowException++;
+					else{
+						counterNullPointerException++;
+					}
 					break;
 
 
@@ -106,6 +142,15 @@ public class Main {
 			catch(NullPointerException|GeneralFlightSimulatorException x){
 				exceptionThrown = true;
 				exceptionName = x.toString();
+				if(equals(exceptionName,"GeneralFlightSimulatorException"))
+					counterGeneralFlightSimulatorException++;
+				else if(equals(exceptionName,"PlaneTooHighException"))
+					counterPlaneTooHighException++;
+				else if(equals(exceptionName,"PlaneTooLowException"))
+					counterPlaneTooLowException++;
+				else{
+					counterNullPointerException++;
+				}
 				
 
 			}
@@ -117,6 +162,15 @@ public class Main {
 			catch(NullPointerException|GeneralFlightSimulatorException x){
 				exceptionThrown = true;
 				exceptionName = x.toString();
+				if(equals(exceptionName,"GeneralFlightSimulatorException"))
+					counterGeneralFlightSimulatorException++;
+				else if(equals(exceptionName,"PlaneTooHighException"))
+					counterPlaneTooHighException++;
+				else if(equals(exceptionName,"PlaneTooLowException"))
+					counterPlaneTooLowException++;
+				else{
+					counterNullPointerException++;
+				}
 				
 
 
@@ -129,7 +183,15 @@ public class Main {
 			catch(NullPointerException|GeneralFlightSimulatorException x){
 				exceptionThrown = true;
 				exceptionName = x.toString();
-				System.out.print(exceptionName);
+				if(equals(exceptionName,"GeneralFlightSimulatorException"))
+					counterGeneralFlightSimulatorException++;
+				else if(equals(exceptionName,"PlaneTooHighException"))
+					counterPlaneTooHighException++;
+				else if(equals(exceptionName,"PlaneTooLowException"))
+					counterPlaneTooLowException++;
+				else{
+					counterNullPointerException++;
+				}
 
 
 			}
@@ -150,6 +212,18 @@ public class Main {
 		case 99:
 			System.out.println("Successful Simulations: " + successfulSimulations);
 			System.out.println("Unsuccessful Simulations: " + unsuccessfulSimulations);
+			if(counterGeneralFlightSimulatorException != 0){
+				System.out.println("Occurences of GeneralFlightSimulatorException: " + counterGeneralFlightSimulatorException);
+			}
+			else if(counterPlaneTooHighException != 0){
+				System.out.println("Occurences of PlaneTooHighException: " + counterPlaneTooHighException);
+			}
+			else if(counterPlaneTooLowException != 0){
+				System.out.println("Occurences of PlaneTooLowException: " + counterPlaneTooHighException);
+			}
+			else if(counterNullPointerException != 0){
+				System.out.println("Occurences of NullPointerException: " + counterNullPointerException);
+			}
 			System.out.println("Are you sure you want to exit the simulation? Enter 1 for yes and 2 for no");
 			int decision = scanner.nextInt();
 			if(decision == 1)
@@ -160,6 +234,7 @@ public class Main {
 			System.out.println("Your selection was invalid.");
 			break;
 		}
+		
 
 	}
 
