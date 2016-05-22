@@ -1,0 +1,29 @@
+Aufgabe 3: File-/Directory Handling - Zusatzaufgabe - 40 Punkte
+
+In dieser Aufgabe sollen die in Aufgabe 3 implementierten Caesar-Reader/Writer dazu verwendet werden,
+Textdateien (.txt) auf der Festplatte zu ver-/entschlusseln. Ein Benutzer soll den Pfad zu einem beliebi- ¨
+gen Ordner angeben k¨onnen, woraufhin alle darin enthaltenen Textdateien verschlusselt bzw. entschl ¨ usselt ¨
+werden. Die gesamte Struktur des Ordners soll dabei erhalten bleiben.
+
+Erstellen Sie dazu zuerst das Interface IFileEncryptor mit folgenden Methoden:
+public File encrypt(File sourceDirectory)
+public File decrypt(File sourceDirectory)
+
+Anmerkungen: File kommt aus dem Paket java.io und kann eine Datei oder ein Ordner sein. Der
+Ruckgabewert ist der verschl ¨ usselte/entschl ¨ usselte Ordner. ¨
+
+Anschließend implementieren Sie das Interface in der Klasse CaesarFileEncryptor, welche in der encryptMethode
+den CaesarWriter verwendet, um den Inhalt aller Dateien des ubergebenen Ordners zu verschl ¨ usseln ¨
+und in der decrypt-Methode den CaesarReader, um den Inhalt aller Dateien des ubergebenen Ordners zu ¨
+entschlusseln. ¨
+
+	- Der verschlusselte bzw. entschl ¨ usselte Ordner soll im selben Verzeichnis wie der Quellordner ge- ¨
+	speichert werden und am Ende der Methode als Ruckgabewert zur ¨ uckgege-ben werden. ¨
+	- Als Name des verschlusselten bzw. entschl ¨ usselten Ordners w ¨ ¨ahlen Sie den Namen des Quellordners
+	und h¨angen encrypted bzw. decrypted an.
+	- Beachten Sie, dass die Zielordner keine bereits existierenden Ordner uberschreiben d ¨ urfen. Falls der ¨
+	Ordner bereits existieren sollte, stellen Sie zus¨atzlich eine Zahl dahinter (z.B. SecretFolder encrypted(1),
+	bzw. 2, 3, . . . bis ein freier Ordnername gefunden ist).
+	
+Schreiben Sie zus¨atzlich einen geeigneten Programmrahmen, in dem ein Benutzer den Pfad zu einem Ordner
+eingeben kann, der daraufhin nach Wunsch ver- oder entschlusselt wird.
