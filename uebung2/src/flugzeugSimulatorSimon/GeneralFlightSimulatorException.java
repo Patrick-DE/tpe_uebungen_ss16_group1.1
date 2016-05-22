@@ -9,9 +9,9 @@ public class GeneralFlightSimulatorException extends Exception {
 	private String message;
 
 	public GeneralFlightSimulatorException(){
-		
+		super();
 	}
-	public GeneralFlightSimulatorException(String string) {
+	public GeneralFlightSimulatorException(String message) {
 		this.message = message;
 	}
 	public String getMessage(){

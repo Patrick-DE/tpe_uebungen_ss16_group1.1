@@ -23,16 +23,32 @@ public interface Plane {
 	* @param additionalHeight
 	* The altitude difference the airplane is ascending/descending for the next kilometer
 	* positive -> ascending, negative -> descending
-	* niedriger fliegt als zuvor. Kann positiv oder negativ sein.
 	* @throws GeneralFlightSimulatorException
 	* If problems occur while flying.
-	1
-	* Falls beim Fliegen Probleme auftauchen.
 	*/
 	public void flyNextKilometer(int additionalHeight) throws GeneralFlightSimulatorException;
 	
+	
+	/**
+	 * Print the Object's attributes from Touristenflugzeug:
+	 * - coveredDistance
+	 * - midAir
+	 * - doorOpen
+	 * - standingStill
+	 * - height
+	 */
 	public void print();
+	
+	/**
+	 * Returns the height of the plane
+	 * @return
+	 */
 	public int getheight();
+	
+	/**
+	 * Returns the already covered distance by the plane
+	 * @return
+	 */
 	public int getcoveredDistance();
 	
 }

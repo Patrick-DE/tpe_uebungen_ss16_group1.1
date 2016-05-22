@@ -44,7 +44,7 @@ public class Main {
 		System.out.println("1: Create route and plane ");
 		System.out.println("2: Close doors");
 		System.out.println("3: Fly complete route");
-		System.out.println("10:Fly next kilometer ");
+		System.out.println("10: Fly next kilometer ");
 		System.out.println("11: Stop");
 		System.out.println("12: Open doors");
 		System.out.println("13: Evaluate simulation");
