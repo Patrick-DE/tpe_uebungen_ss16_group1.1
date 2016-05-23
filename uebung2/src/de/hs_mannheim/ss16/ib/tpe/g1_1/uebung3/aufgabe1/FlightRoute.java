@@ -1,36 +1,63 @@
 package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung3.aufgabe1;
 
+
 public class FlightRoute {
 
 	private int kilometer = 0;
-	private int minhoehe = 0;
-	private int maxhoehe = 0;
+	private int minHeight = 0;
+	private int maxHeight = 0;
 	
-	FlightRoute(int kilometer, int minhoehe, int maxhoehe){
+	FlightRoute(int kilometer, int minHeight, int maxHeight) {
+		try{
 		setKilometer(kilometer);
-		setMinhoehe(minhoehe);
-		setMaxhoehe(maxhoehe);
-//		this.kilometer = kilometer;
-//		this.minhoehe = minhoehe;
-//		this.maxhoehe = maxhoehe;
+		setmaxHeight(maxHeight);
+		setminHeight(minHeight);
+		}
+		catch(SimulatorConfigurationException a){
+			System.out.println("An error occured!");
+			System.out.println("Reason: "+ a.getMessage());
+			a.printStackTrace();
+			System.exit( 0 );
+		}
+			
+		
 	}
 	
-	public int getKilometer() {
+
+	public int getKilometer()   {
 		return kilometer;
 	}
-	public void setKilometer(int kilometer) {
-		this.kilometer = kilometer;
+	public void setKilometer(int kilometer) throws SimulatorConfigurationException {
+		if(kilometer <= 0){
+			throw new SimulatorConfigurationException();
+		}
+		else{
+			this.kilometer = kilometer;
+		}
 	}
-	public int getMinhoehe() {
-		return minhoehe;
+		
+
+	public int getminHeight() {
+		return minHeight;
 	}
-	public void setMinhoehe(int minhoehe) {
-		this.minhoehe = minhoehe;
+	public void setminHeight(int minHeight) throws SimulatorConfigurationException {
+		if(minHeight > getmaxHeight() || minHeight <= 0 ){
+			throw new SimulatorConfigurationException();
+		}
+		else{
+			this.minHeight = minHeight;
+		}
+		
 	}
-	public int getMaxhoehe() {
-		return maxhoehe;
+	public int getmaxHeight() {
+		return maxHeight;
 	}
-	public void setMaxhoehe(int maxhoehe) {
-		this.maxhoehe = maxhoehe;
+	public void setmaxHeight(int maxHeight)throws SimulatorConfigurationException  {
+		if(maxHeight <= 0){
+			throw new SimulatorConfigurationException();
+		}
+		else{
+			this.maxHeight = maxHeight;
+		}
 	}
 }

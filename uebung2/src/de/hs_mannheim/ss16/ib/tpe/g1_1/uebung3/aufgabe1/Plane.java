@@ -13,9 +13,9 @@ public interface Plane {
 	*/
 	public void closeDoors();
 	/**
-	* Stops the airplan when it moves on ground.
+	* Stops the airplane when it moves on ground.
 	* @throws GeneralFlightSimulatorException
-	* If the airplane is in the air
+	* If the airplane is still in the air
 	*/
 	public void stop() throws GeneralFlightSimulatorException;
 	/**
@@ -23,18 +23,51 @@ public interface Plane {
 	* @param additionalHeight
 	* The altitude difference the airplane is ascending/descending for the next kilometer
 	* positive -> ascending, negative -> descending
-	* niedriger fliegt als zuvor. Kann positiv oder negativ sein.
 	* @throws GeneralFlightSimulatorException
+<<<<<<< HEAD
+	* If the minimum permissible height is not reached after two kilometers, the PlaneTooLowException will be thrown.
+	* If the maximum permissible height is exceeded, the PlaneTooHighException will be thrown.
+	* If the parameter of the method is invalid, the GeneralFlightSimulatorException will be thrown.
+	* If the door is still open or if the plane would fly past the final destination the GeneralFlightSimulatorException will be thrown.
+
+=======
 	* If problems occur while flying.
-	1
-	* Falls beim Fliegen Probleme auftauchen.
+>>>>>>> branch 'master' of https://github.com/Patrick-DE/tpe_uebungen_ss16_group1.1.git
 	*/
 	public void flyNextKilometer(int additionalHeight) throws GeneralFlightSimulatorException;
 	
+	/** 
+	 * Prints all relevant information about the airplane
+=======
+	
+	/**
+	 * Print the Object's attributes from Touristenflugzeug:
+	 * - coveredDistance
+	 * - midAir
+	 * - doorOpen
+	 * - standingStill
+	 * - height
+	 */
 	public void print();
-	public void run(String weg);
-	public int getAktuellehoehe();
-	public int getGeflogeneKilometer();
-	void landen();
+	/**
+	 * @return the current height is returned
+=======
+	
+	/**
+	 * Returns the height of the plane
+	 * @return
+>>>>>>> branch 'master' of https://github.com/Patrick-DE/tpe_uebungen_ss16_group1.1.git
+	 */
+	public int getheight();
+	/**
+	 * @return The distance which has already been covered by the plane.
+=======
+	
+	/**
+	 * Returns the already covered distance by the plane
+	 * @return
+>>>>>>> branch 'master' of https://github.com/Patrick-DE/tpe_uebungen_ss16_group1.1.git
+	 */
+	public int getcoveredDistance();
 	
 }
