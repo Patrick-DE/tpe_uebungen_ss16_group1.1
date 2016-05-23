@@ -72,7 +72,19 @@ public class Main {
 			int minHeight = scanner.nextInt();
 			System.out.println("What is the maximum height?");
 			int maxHeight = scanner.nextInt();
-			route = new FlightRoute(distance,minHeight,maxHeight);			
+			System.out.println("Is the plane flying over a city? Press 1 for yes and 2 for no.");
+			int decision = scanner.nextInt();
+			if(decision == 1){
+				System.out.println("What is the minimum height over the city?");
+				int cityHeight = scanner.nextInt();
+				System.out.println("How many kilometers has the plane flown when it reaches the city?");
+				int reachCity = scanner.nextInt();
+				System.out.println("How many kilometers has the plane flown when it passes the city?");
+				int passCity = scanner.nextInt();
+				route = new FlightRoute(distance,minHeight,maxHeight,cityHeight,reachCity,passCity);
+			}
+			else if(decision == 2)
+				route = new FlightRoute(distance,minHeight,maxHeight);			
 			newPlane = new Touristenflugzeug(0, false, false, true, 0,route);
 			break;
 		case 2:
@@ -90,6 +102,7 @@ public class Main {
 			}
 			break;
 			// Flies the plane through the complete route. As long as the final destination is far away enough maximum height will be reached
+			// Lands the plane but does not stop it
 			// This simulation should normally not cause any exceptions unless the values for the route are incorrect or no route and plane has yet been created
 		case 3:
 			try{
@@ -157,7 +170,6 @@ public class Main {
 
 					}
 				}
-
 			}
 			break;
 			// The user decides how much the plain should ascend in the next kilometer
@@ -268,7 +280,7 @@ public class Main {
 				System.out.println("Occurences of NullPointerException: " + counterNullPointerException);
 			}
 			System.out.println("Are you sure you want to exit the simulation? Enter 1 for yes and 2 for no");
-			int decision = scanner.nextInt();
+			decision = scanner.nextInt();
 			if(decision == 1)
 				System.exit( 0 );
 			else

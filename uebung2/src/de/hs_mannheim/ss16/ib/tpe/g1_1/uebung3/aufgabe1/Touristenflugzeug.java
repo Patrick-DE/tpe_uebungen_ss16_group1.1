@@ -69,7 +69,7 @@ public class Touristenflugzeug implements Plane {
 		}
 	}
 
-	@Override
+
 	public void flyNextKilometer(int additionalHeight) throws GeneralFlightSimulatorException {
 		midAir = true;
 		standingStill = false;
@@ -93,7 +93,7 @@ public class Touristenflugzeug implements Plane {
 				coveredDistance++;
 
 			}
-			// Plain is in reach of airport so minimum height is no requirement anymore
+			// Plain is in reach of airport so minimum height is no requirement anymore but has passed the city already
 			else if(!doorOpen && coveredDistance >= newRoute.getKilometer()-2 ){
 				if(height > newRoute.getmaxHeight()){
 					height = height + additionalHeight;
@@ -108,17 +108,18 @@ public class Touristenflugzeug implements Plane {
 				
 				height = height + additionalHeight;
 				coveredDistance++;
-
 			}
 			// period of time where the plain is in mid-air and not yet in reach of final destination
 			// it should neither ascend over the maximum height nor descend below the minimum height
 			else if(!doorOpen && coveredDistance >= 2){
-				if(height + additionalHeight < newRoute.getminHeight()){
+				if(coveredDistance >= newRoute.getreachCity() && coveredDistance <= newRoute.getpassCity()){
+					if(height + additionalHeight < newRoute.getcityHeight())
+						throw new PlaneTooLowException(height);	
+				}
+				else if(height + additionalHeight < newRoute.getminHeight())
 					throw new PlaneTooLowException(height);
-				}
-				else if(height + additionalHeight > newRoute.getmaxHeight()){
+				else if(height + additionalHeight > newRoute.getmaxHeight())
 					throw new PlaneTooHighException(height);
-				}
 				
 				height = height + additionalHeight;
 				coveredDistance++;
@@ -126,6 +127,8 @@ public class Touristenflugzeug implements Plane {
 			else{
 				throw new GeneralFlightException("Doors are open. Please close the doors before you try to start flying");
 			}
+			if(height == 0)
+				midAir = false;
 		}
 
 	}
