@@ -143,7 +143,8 @@ public class CryptGUI extends JFrame implements ActionListener{
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				{
+				{/*TODO: DECRYPT EINBINDEN - WAS PASSIERT WENN DER BUTTON GEDRÜCKT WIRD */
+				/*IN DIE TEXTBOX WAS SCHREIBEN: ergebnis.append("Opening: " + file.getName() + "." + newline); */
 					JButton decrypt = new JButton("Decrypt");
 					decrypt.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
@@ -159,11 +160,14 @@ public class CryptGUI extends JFrame implements ActionListener{
 //					        Crypter reverse = new CrypterReverse();
 //					        ergebnistext =(reverse.decrypt(caesar.decrypt(reverse.decrypt(eingegeben))));
 					        changelabel(ergebnistext);
+					        /* NACH DECRYPT DEN NEUEN PFAD AUF DEN EXPLORER VIEW SETZEN
+						        http://stackoverflow.com/questions/5721504/jfilechooser-set-directory-to-a-path-in-a-file
+					        */
 						}
 					});
 					buttonPane.add(decrypt);
 				}
-				{
+				{/*TODO: ENCRYPT EINBINDEN - WAS PASSIERT WENN DER BUTTON GEDRÜCKT WIRD */
 					JButton encrypt = new JButton("Encrypt");
 					encrypt.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
