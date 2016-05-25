@@ -68,7 +68,7 @@ public class CaesarWriter extends FilterWriter {
     
     @Override
     public void write(int c) throws IOException {
-        String newStr = "" + c;
+        String newStr = "" + (char) c;
         this.write(newStr);
     }
     

@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -109,8 +109,9 @@ public class CryptGUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent arg0) {
 				//Handle open button action.
 			    if (arg0.getSource() == btnChooseAFile) {
+			        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			        int returnVal = fc.showOpenDialog(CryptGUI.this);
-
+			        ergebnis.setText("");
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
 			            File file = fc.getSelectedFile();
 			            //This is where a real application would open the file.
@@ -148,21 +149,28 @@ public class CryptGUI extends JFrame implements ActionListener{
 					JButton decrypt = new JButton("Decrypt");
 					decrypt.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-							String eingegeben = null;
-							String ergebnistext = null;
-							try {
+						    String eingegeben = null;
+						    String ergebnistext = null;
+						    if (fc.getSelectedFile() != null) {
+						        try {
+						            /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
 								eingegeben = eingabe.getText();
-							} catch (StringIndexOutOfBoundsException e) {
-								// TODO Auto-generated catch block
-								System.out.println("Es gab ein Fehler beim einlesen des Textes!");
-							}
-//							Crypter caesar = new CrypterCaesar(5);
-//					        Crypter reverse = new CrypterReverse();
-//					        ergebnistext =(reverse.decrypt(caesar.decrypt(reverse.decrypt(eingegeben))));
-					        changelabel(ergebnistext);
-					        /* NACH DECRYPT DEN NEUEN PFAD AUF DEN EXPLORER VIEW SETZEN
-						        http://stackoverflow.com/questions/5721504/jfilechooser-set-directory-to-a-path-in-a-file
-					        */
+						             */
+
+						            int shift = Integer.parseInt(key.getText());
+						            Runtime.getRuntime().exec("explorer.exe " + new CaesarFileEncryptor(shift).decrypt(fc.getSelectedFile()).getPath());
+
+						        } catch (IOException e) {
+
+						        } catch (NumberFormatException e) {
+						            ergebnis.append("You have to enter an integer value as encryption key" + newline);
+						        } catch (StringIndexOutOfBoundsException e) {
+						            // TODO Auto-generated catch block
+						            ergebnis.append("Es gab ein Fehler beim einlesen des Textes!" + newline);
+						        }
+						    } else {
+						        ergebnis.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
+						    }
 						}
 					});
 					buttonPane.add(decrypt);
@@ -170,19 +178,28 @@ public class CryptGUI extends JFrame implements ActionListener{
 				{/*TODO: ENCRYPT EINBINDEN - WAS PASSIERT WENN DER BUTTON GEDRÜCKT WIRD */
 					JButton encrypt = new JButton("Encrypt");
 					encrypt.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							String eingegeben = null;
-							String ergebnistext = null;
-							try {
+					    public void actionPerformed(ActionEvent e) {
+					        String eingegeben = null;
+					        String ergebnistext = null;
+					        if (fc.getSelectedFile() != null) {
+					            try {
+					                /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
 								eingegeben = eingabe.getText();
-							} catch (StringIndexOutOfBoundsException e1) {
-								// TODO Auto-generated catch block
-								System.out.println("Es gab ein Fehler beim einlesen des Textes!");
-							}
-//							Crypter caesar = new CrypterCaesar(5);
-//					        Crypter reverse = new CrypterReverse();
-//					        ergebnistext=(reverse.encrypt(caesar.encrypt(reverse.encrypt(eingegeben))));
-					        changelabel(ergebnistext);
+					                 */
+
+					                int shift = Integer.parseInt(key.getText());
+					                Runtime.getRuntime().exec("explorer.exe " + new CaesarFileEncryptor(shift).encrypt(fc.getSelectedFile()).getPath());
+					            } catch (IOException e1) {
+
+					            } catch (NumberFormatException e1) {
+					                ergebnis.append("You have to enter an integer value as encryption key" + newline);
+					            } catch (StringIndexOutOfBoundsException e1) {
+					                // TODO Auto-generated catch block
+					                ergebnis.append("Es gab ein Fehler beim einlesen des Textes!" + newline);
+					            }
+					        } else {
+					            ergebnis.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
+					        }
 						}
 					});
 					buttonPane.add(encrypt);
