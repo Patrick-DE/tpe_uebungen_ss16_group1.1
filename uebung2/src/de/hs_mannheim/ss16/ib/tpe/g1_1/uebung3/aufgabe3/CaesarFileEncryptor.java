@@ -5,14 +5,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.JTextArea;
+
 import de.hs_mannheim.ss16.ib.tpe.g1_1.uebung3.aufgabe2.CaesarReader;
 import de.hs_mannheim.ss16.ib.tpe.g1_1.uebung3.aufgabe2.CaesarWriter;
 
 public class CaesarFileEncryptor implements IFileEncryptor {
 
     private int shift;
+    private JTextArea informationField;
     
     public CaesarFileEncryptor(int shift) {
+        this.shift = shift;
+    }
+    
+    public CaesarFileEncryptor(JTextArea informationField, int shift) {
+        this.informationField = informationField;
         this.shift = shift;
     }
 
@@ -20,44 +28,62 @@ public class CaesarFileEncryptor implements IFileEncryptor {
     public File encrypt(File sourceDirectory) {
         if (sourceDirectory.exists()) {
             if (sourceDirectory.isDirectory()) {
-                String encryptedPath = sourceDirectory.getPath() + "_encrypted";
-                File encryptedFile = new File(encryptedPath);
-                int i = 0;
-                // create new directory
-                while (!encryptedFile.mkdir())
-                    encryptedFile = new File(encryptedPath+i++);
-                
-                // get all txt files and encrypt them in destination file
                 File[] txt_filesToEncrypt = getTxtFiles(sourceDirectory);
-                for (i = 0; i < txt_filesToEncrypt.length; i++) {
-                    FileReader reader = null;
-                    CaesarWriter writer = null;
-                    String path = txt_filesToEncrypt[i].getPath();
-                    String encryptPath = changePath(path, encryptedFile.getPath());
-                    try {
-                        createNecessaryDirectories(new File(encryptPath));
-                        reader = new FileReader(path);
-                        writer = new CaesarWriter(new FileWriter(encryptPath), shift);
-                        
-                        int sign = reader.read();
-                        while (sign != -1) {
-                            char c = (char) sign;
-                            writer.write(c);
-                            sign = reader.read();
-                        }
-                        reader.close();
-                        writer.close();
-                    } catch (IOException e) {
-                        System.out.println("Something went wrong");
-                    }
-                }
+                if (txt_filesToEncrypt == null || txt_filesToEncrypt.length == 0) {
+                    String encryptedPath = sourceDirectory.getPath() + "_encrypted";
+                    File encryptedFile = new File(encryptedPath);
+                    int i = 0;
+                    // create new directory
+                    while (!encryptedFile.mkdir())
+                        encryptedFile = new File(encryptedPath+i++);
 
-                return encryptedFile;
+                    // get all txt files and encrypt them in destination file
+
+                    for (i = 0; i < txt_filesToEncrypt.length; i++) {
+                        FileReader reader = null;
+                        CaesarWriter writer = null;
+                        String path = txt_filesToEncrypt[i].getPath();
+                        String encryptPath = changePath(path, encryptedFile.getPath());
+                        try {
+                            createNecessaryDirectories(new File(encryptPath));
+                            reader = new FileReader(path);
+                            writer = new CaesarWriter(new FileWriter(encryptPath), shift);
+
+                            int sign = reader.read();
+                            while (sign != -1) {
+                                char c = (char) sign;
+                                writer.write(c);
+                                sign = reader.read();
+                            }
+                            reader.close();
+                            writer.close();
+                        } catch (IOException e) {
+                            if (informationField == null)
+                                System.out.println("Something went wrong");
+                            else
+                                informationField.append("Something went wrong\n");
+                        }
+                    }
+
+                    return encryptedFile;
+                } else {
+                    if (informationField == null)
+                        System.out.println("Source directory does not have any txt files.");
+                    else
+                        informationField.append("Source directory does not have any txt files.\n");
+                    return null;
+                }
             } else if (sourceDirectory.isFile()) {
-                System.out.println("Source directory is a file. So it can not be encrypted.");
+                if (informationField == null)
+                    System.out.println("Source directory is a file. So it can not be encrypted.");
+                else
+                    informationField.append("Source directory is a file. So it can not be encrypted.\n");
                 return null;
             } else {
-                System.out.println("Can not be encrypted.");
+                if (informationField == null)
+                    System.out.println("Can not be encrypted.");
+                else
+                    informationField.append("Can not be encrypted.\n");
                 return null;
             }
         } else {
@@ -65,11 +91,24 @@ public class CaesarFileEncryptor implements IFileEncryptor {
         }
     }
 
+    /**
+     * this method creates all necessary parent folders, if they do not exist.
+     * @param file
+     *             the file or directory
+     */
     private void createNecessaryDirectories(File file) {
         if (!file.exists())
             new File(file.getParent()).mkdirs();
     }
 
+    /**
+     * this method changes the path of path, so that the new path lays in newSource
+     * @param path
+     *             path to be changed
+     * @param newSource
+     *                  the place where the new path has to lay
+     * @return
+     */
     private String changePath(String path, String newSource) {
         String newPath = newSource;
         int depthOfNewSource = getDepthOfPath(newSource);
@@ -85,6 +124,12 @@ public class CaesarFileEncryptor implements IFileEncryptor {
         return newPath;
     }
 
+    /**
+     * this method finds out how deep a file path
+     * @param path
+     *             path of file or directory
+     * @return the depth of the path
+     */
     private int getDepthOfPath(String path) {
         int depth = 0;
         for (int i = 0; i < path.length(); i++) {
@@ -98,44 +143,61 @@ public class CaesarFileEncryptor implements IFileEncryptor {
     public File decrypt(File sourceDirectory) {
         if (sourceDirectory.exists()) {
             if (sourceDirectory.isDirectory()) {
-                String decryptedPath = sourceDirectory.getPath() + "_decrypted";
-                File decryptedFile = new File(decryptedPath);
-                int i = 0;
-                // create new directory
-                while (!decryptedFile.mkdir())
-                    decryptedFile = new File(decryptedPath+i++);
-                
-                // get all txt files and encrypt them in destination file
                 File[] txt_filesToDecrypt = getTxtFiles(sourceDirectory);
-                for (i = 0; i < txt_filesToDecrypt.length; i++) {
-                    CaesarReader reader = null;
-                    FileWriter writer = null;
-                    String path = txt_filesToDecrypt[i].getPath();
-                    String decryptPath = changePath(path, decryptedFile.getPath());
-                    try {
-                        createNecessaryDirectories(new File(decryptPath));
-                        reader = new CaesarReader(new FileReader(path), shift);
-                        writer = new FileWriter(decryptPath);
-                        
-                        int sign = reader.read();
-                        while (sign != -1) {
-                            char c = (char) sign;
-                            writer.write(c);
-                            sign = reader.read();
-                        }
-                        reader.close();
-                        writer.close();
-                    } catch (IOException e) {
-                        System.out.println("Something went wrong");
-                    }
-                }
+                if (txt_filesToDecrypt == null || txt_filesToDecrypt.length == 0) {
+                    String decryptedPath = sourceDirectory.getPath() + "_decrypted";
+                    File decryptedFile = new File(decryptedPath);
+                    int i = 0;
+                    // create new directory
+                    while (!decryptedFile.mkdir())
+                        decryptedFile = new File(decryptedPath+i++);
 
-                return decryptedFile;
+                    // get all txt files and encrypt them in destination file
+                    for (i = 0; i < txt_filesToDecrypt.length; i++) {
+                        CaesarReader reader = null;
+                        FileWriter writer = null;
+                        String path = txt_filesToDecrypt[i].getPath();
+                        String decryptPath = changePath(path, decryptedFile.getPath());
+                        try {
+                            createNecessaryDirectories(new File(decryptPath));
+                            reader = new CaesarReader(new FileReader(path), shift);
+                            writer = new FileWriter(decryptPath);
+
+                            int sign = reader.read();
+                            while (sign != -1) {
+                                char c = (char) sign;
+                                writer.write(c);
+                                sign = reader.read();
+                            }
+                            reader.close();
+                            writer.close();
+                        } catch (IOException e) {
+                            if (informationField == null)
+                                System.out.println("Something went wrong");
+                            else
+                                informationField.append("Something went wrong\n");
+                        }
+                    }
+
+                    return decryptedFile;
+                } else {
+                    if (informationField == null)
+                        System.out.println("Source directory does not have any txt files.");
+                    else
+                        informationField.append("Source directory does not have any txt files.\n");
+                    return null;
+                }
             } else if (sourceDirectory.isFile()) {
-                System.out.println("Source directory is a file. So it can not be encrypted.");
+                if (informationField == null)
+                    System.out.println("Source directory is a file. So it can not be encrypted.");
+                else
+                    informationField.append("Source directory is a file. So it can not be encrypted.\n");
                 return null;
             } else {
-                System.out.println("Can not be encrypted.");
+                if (informationField == null)
+                    System.out.println("Can not be encrypted.");
+                else
+                    informationField.append("Can not be encrypted.\n");
                 return null;
             }
         } else {
@@ -143,38 +205,54 @@ public class CaesarFileEncryptor implements IFileEncryptor {
         }
     }
 
+    /**
+     * this method gets all txt files from a folder and its sub folders
+     * @param sourceDirectory
+     *                        the start folder / file
+     * @return a File array with all txt files. null, if sourceDirectory does not exist or does not have any txt files
+     */
     private File[] getTxtFiles(File sourceDirectory) {
         if (sourceDirectory.exists()) {
-            int numberOfTxtFiles = getNumberOfTxtFiles(sourceDirectory);
-            File[] txt_files = new File[numberOfTxtFiles];
-            File[] files = sourceDirectory.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isFile()) {
-                    if (pathEndsWith(files[i].getPath(), ".txt"))
-                        txt_files[nextFreeIndex(txt_files)] = files[i];
-                } else {
-                    File[] txtfilesOfSubfolder = getTxtFiles(files[i]);
-                    add(txt_files, txtfilesOfSubfolder);
+            if (getNumberOfTxtFiles(sourceDirectory) > 0) {
+                int numberOfTxtFiles = getNumberOfTxtFiles(sourceDirectory);
+                File[] txt_files = new File[numberOfTxtFiles];
+                File[] files = sourceDirectory.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    if (files[i].isFile()) {
+                        if (pathEndsWith(files[i].getPath(), ".txt"))
+                            txt_files[nextFreeIndex(txt_files)] = files[i];
+                    } else {
+                        File[] txtfilesOfSubfolder = getTxtFiles(files[i]);
+                        add(txt_files, txtfilesOfSubfolder);
+                    }
                 }
+                return txt_files;
+            } else {
+                return null;
             }
-            return txt_files;
         } else {
-            System.out.println("Wrong Path");
             return null;
         }
     }
     
-    private void add(File[] txt_files, File[] txtfilesOfSubfolder) {
+    /**
+     * this method adds filesToAdd to files
+     * @param files
+     *              the files
+     * @param filesToAdd
+     *                   the files, which will be added to files
+     */
+    private void add(File[] files, File[] filesToAdd) {
         int i = 0;
-        while (nextFreeIndex(txt_files) < txt_files.length && i < txtfilesOfSubfolder.length) {
-            txt_files[nextFreeIndex(txt_files)] = txtfilesOfSubfolder[i++];
+        while (nextFreeIndex(files) < files.length && i < filesToAdd.length) {
+            files[nextFreeIndex(files)] = filesToAdd[i++];
         }
     }
 
     /**
      * 
      * @param array
-     * @return
+     * @return first array index which is not null.
      */
     private int nextFreeIndex(Object[] array) {
         int i = 0;
@@ -188,6 +266,12 @@ public class CaesarFileEncryptor implements IFileEncryptor {
         return i;
     }
     
+    /**
+     * this method counts the number of txt files in a file / directory and its sub folders
+     * @param sourceDirectory
+     *                        start folder or file from where the counting begins
+     * @return number of txt files. -1, if sourceDirectory does not exist.
+     */
     private int getNumberOfTxtFiles(File sourceDirectory) {  
         if (sourceDirectory.exists()) {
             int n = 0;
@@ -202,7 +286,6 @@ public class CaesarFileEncryptor implements IFileEncryptor {
             }
             return n;
         } else {
-            System.out.println("Wrong Path");
             return -1;
         }
     }

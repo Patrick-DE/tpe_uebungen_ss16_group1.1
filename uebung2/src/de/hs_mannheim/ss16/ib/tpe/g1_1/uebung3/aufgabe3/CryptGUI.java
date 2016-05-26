@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +32,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 
 	static private final String newline = "\n";
 	private final JPanel contentPanel = new JPanel();
-	private static JTextArea ergebnis;
+	private JTextArea informationField;
 	private JTextField key;
 	final JFileChooser fc = new JFileChooser();
 	/**
@@ -70,9 +71,9 @@ public class CryptGUI extends JFrame implements ActionListener{
 	 * Create the frame.
 	 */
 	public CryptGUI() {
-		setBounds(100, 100, 399, 302);
+		setBounds(100, 100, 500, 302);
 		getContentPane().setLayout(new BorderLayout());
-		{
+		{/*
 			JMenuBar menuBar = new JMenuBar();
 			getContentPane().add(menuBar, BorderLayout.NORTH);
 			{
@@ -98,7 +99,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 					});
 					mnNewMenu.add(quit);
 				}
-			}
+			}*/
 		}
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -109,17 +110,17 @@ public class CryptGUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent arg0) {
 				//Handle open button action.
 			    if (arg0.getSource() == btnChooseAFile) {
-			        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			        int returnVal = fc.showOpenDialog(CryptGUI.this);
-			        ergebnis.setText("");
+			        informationField.setText("");
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
 			            File file = fc.getSelectedFile();
 			            //This is where a real application would open the file.
-			            ergebnis.append("Opening: " + file.getName() + "." + newline);
+			            informationField.append("Opening: " + file.getName() + "." + newline);
 			        } else {
-			        	ergebnis.append("Open command cancelled by user." + newline);
+			        	informationField.append("Open command cancelled by user." + newline);
 			        }
-			        ergebnis.setCaretPosition(ergebnis.getDocument().getLength());
+			        informationField.setCaretPosition(informationField.getDocument().getLength());
 			    }			
 			}
 		});
@@ -128,17 +129,17 @@ public class CryptGUI extends JFrame implements ActionListener{
 		
 		{
 			key = new JTextField();
-			key.setToolTipText("Encryption Key");
+			key.setToolTipText("Decrytion / Encryption Key");
 			key.setBounds(10, 53, 248, 20);
 			contentPanel.add(key);
 			key.setColumns(10);
 		}
-		ergebnis = new JTextArea(5,20);
-		ergebnis.setToolTipText("Result");
-		ergebnis.setEditable(false);
-		ergebnis.setBounds(10, 105, 363, 94);
-		contentPanel.add(ergebnis);
-		ergebnis.setColumns(30);
+		informationField = new JTextArea(5,20);
+		informationField.setToolTipText("Information");
+		informationField.setEditable(false);
+		informationField.setBounds(10, 105, 465, 110);
+		contentPanel.add(informationField);
+		informationField.setColumns(30);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -158,18 +159,41 @@ public class CryptGUI extends JFrame implements ActionListener{
 						             */
 
 						            int shift = Integer.parseInt(key.getText());
-						            Runtime.getRuntime().exec("explorer.exe " + new CaesarFileEncryptor(shift).decrypt(fc.getSelectedFile()).getPath());
-
+						            File file = fc.getSelectedFile();
+						            informationField.append(file.getPath() + ": Decryption starts" + newline);
+						            File decryptedFile = new CaesarFileEncryptor(informationField, shift).decrypt(file);
+						            if (decryptedFile == null)
+						                informationField.append(file.getPath() + ": Decryption failed" + newline);
+						            else {
+						                informationField.append(file.getPath() + ": Decryption successful" + newline);
+						                Runtime.getRuntime().exec("explorer.exe " + decryptedFile.getPath());
+						                
+						                /*
+						                 * IM MOMENT WIRD NACH ERFOLGREICHMEM ENTSCHLÜSSELN DER ZIELORDNER IMMER GEÖFFNET
+						                 * EIN BUTTON, DER DEM NUTZER DIE MÖGLICHKEIT GIBT SELBST ZU ENTSCHEIDEN, OB ER DEN
+						                 * ORDNER ÖFFNEN WILL, WÄRE PERFEKT.
+						                 * 
+						                 * JBUTTON NAME -> "Show File"
+						                 * WENN ER GEKLICKT WIRD DIESEN BEFEHL AUSFÜHREN (ÖFFNET ORDNER VIA EXPLORER) 
+						                 * -> Runtime.getRuntime().exec("explorer.exe " + decryptedFile.getPath());
+						                 * 
+						                 * DANACH SOLL DER JBUTTON WIEDER VERSCHWINDEN
+						                 * JBUTTON MUSS IN DIESEM ELSE BLOCK ERZEUGT WERDEN, 
+						                 * WEIL DER ORDNER NUR ANGEZEIGT WERDEN SOLL, WENN ER AUCH WIRKLICH NACH ERFOLGREICHEM
+						                 * ENTSCHLÜSSELN EXISTIERT
+						                 */
+						                
+						            }
 						        } catch (IOException e) {
 
 						        } catch (NumberFormatException e) {
-						            ergebnis.append("You have to enter an integer value as encryption key" + newline);
+						            informationField.append("You have to enter an integer value as encryption key" + newline);
 						        } catch (StringIndexOutOfBoundsException e) {
 						            // TODO Auto-generated catch block
-						            ergebnis.append("Es gab ein Fehler beim einlesen des Textes!" + newline);
+						            informationField.append("Es gab ein Fehler beim einlesen des Textes!" + newline);
 						        }
 						    } else {
-						        ergebnis.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
+						        informationField.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
 						    }
 						}
 					});
@@ -188,17 +212,40 @@ public class CryptGUI extends JFrame implements ActionListener{
 					                 */
 
 					                int shift = Integer.parseInt(key.getText());
-					                Runtime.getRuntime().exec("explorer.exe " + new CaesarFileEncryptor(shift).encrypt(fc.getSelectedFile()).getPath());
+                                    File file = fc.getSelectedFile();
+                                    informationField.append(file.getPath() + ": Encryption starts" + newline);
+                                    File encryptedFile = new CaesarFileEncryptor(informationField, shift).encrypt(file);
+                                    if (encryptedFile == null)
+                                        informationField.append(file.getPath() + ": Encryption failed" + newline);
+                                    else {
+                                        informationField.append(file.getPath() + ": Encryption successful" + newline);
+                                        Runtime.getRuntime().exec("explorer.exe " + encryptedFile.getPath());
+                                        
+                                        /*
+                                         * IM MOMENT WIRD NACH ERFOLGREICHMEM VERSCHLÜSSELN DER ZIELORDNER IMMER GEÖFFNET
+                                         * EIN BUTTON, DER DEM NUTZER DIE MÖGLICHKEIT GIBT SELBST ZU ENTSCHEIDEN, OB ER DEN
+                                         * ORDNER ÖFFNEN WILL, WÄRE PERFEKT.
+                                         * 
+                                         * JBUTTON NAME -> "Show File"
+                                         * WENN ER GEKLICKT WIRD DIESEN BEFEHL AUSFÜHREN (ÖFFNET ORDNER VIA EXPLORER) 
+                                         * -> Runtime.getRuntime().exec("explorer.exe " + encryptedFile.getPath());
+                                         * 
+                                         * DANACH SOLL DER JBUTTON WIEDER VERSCHWINDEN
+                                         * JBUTTON MUSS IN DIESEM ELSE BLOCK ERZEUGT WERDEN, 
+                                         * WEIL DER ORDNER NUR ANGEZEIGT WERDEN SOLL, WENN ER AUCH WIRKLICH NACH ERFOLGREICHEM
+                                         * VERSCHLÜSSELN EXISTIERT
+                                         */
+                                    }
 					            } catch (IOException e1) {
 
 					            } catch (NumberFormatException e1) {
-					                ergebnis.append("You have to enter an integer value as encryption key" + newline);
+					                informationField.append("You have to enter an integer value as encryption key" + newline);
 					            } catch (StringIndexOutOfBoundsException e1) {
 					                // TODO Auto-generated catch block
-					                ergebnis.append("Es gab ein Fehler beim einlesen des Textes!" + newline);
+					                informationField.append("Es gab ein Fehler beim einlesen des Textes!" + newline);
 					            }
 					        } else {
-					            ergebnis.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
+					            informationField.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
 					        }
 						}
 					});
@@ -207,6 +254,11 @@ public class CryptGUI extends JFrame implements ActionListener{
 			}
 		}
 	}
+	
+	public JTextArea getErgebnis() {
+	    return informationField;
+	}
+	
 	/** Returns an ImageIcon, or null if the path was invalid. */
     protected static ImageIcon createImageIcon(String path) {
         java.net.URL imgURL = CryptGUI.class.getResource(path);
@@ -219,9 +271,9 @@ public class CryptGUI extends JFrame implements ActionListener{
     }
 
 	protected void changelabel(String text) {
-	        ergebnis.getParent().invalidate(); 
-	        ergebnis.setText(text); 
-	        ergebnis.getParent().validate(); 
+	        informationField.getParent().invalidate(); 
+	        informationField.setText(text); 
+	        informationField.getParent().validate(); 
 	        pack(); 
 	    } 
 }
