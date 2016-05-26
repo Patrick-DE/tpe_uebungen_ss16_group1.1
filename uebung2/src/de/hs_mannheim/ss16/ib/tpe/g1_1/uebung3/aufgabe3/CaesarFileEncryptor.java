@@ -29,7 +29,7 @@ public class CaesarFileEncryptor implements IFileEncryptor {
         if (sourceDirectory.exists()) {
             if (sourceDirectory.isDirectory()) {
                 File[] txt_filesToEncrypt = getTxtFiles(sourceDirectory);
-                if (txt_filesToEncrypt == null || txt_filesToEncrypt.length == 0) {
+                if (txt_filesToEncrypt != null) {
                     String encryptedPath = sourceDirectory.getPath() + "_encrypted";
                     File encryptedFile = new File(encryptedPath);
                     int i = 0;
@@ -144,7 +144,7 @@ public class CaesarFileEncryptor implements IFileEncryptor {
         if (sourceDirectory.exists()) {
             if (sourceDirectory.isDirectory()) {
                 File[] txt_filesToDecrypt = getTxtFiles(sourceDirectory);
-                if (txt_filesToDecrypt == null || txt_filesToDecrypt.length == 0) {
+                if (txt_filesToDecrypt != null) {
                     String decryptedPath = sourceDirectory.getPath() + "_decrypted";
                     File decryptedFile = new File(decryptedPath);
                     int i = 0;
