@@ -74,8 +74,8 @@ public class CaesarWriter extends FilterWriter {
     
     /**
      * this method encrypts a given message
-     * @param message
-     *                message to be encrypted
+     * @param str
+     *            message to be encrypted
      * @return the encrypted message
      */
     private String encrypt(String str) {
@@ -92,6 +92,7 @@ public class CaesarWriter extends FilterWriter {
     /**
      * this method looks for the position of the character in the specialAlphabet 
      * @param character
+     *                  the character to look for
      * @return the index of the character in the specialAlphabet, if it was found. Otherwise -1 will be returned.
      */
     private int getIndexOfCharInSpecialAlphabet(char character) {

@@ -52,6 +52,12 @@ public class CaesarReader extends FilterReader {
         return numberOfReadCharacters;
     }
     
+    /**
+     * converts a char array to a String
+     * @param cbuf
+     *             the char array
+     * @return char array converted to a String
+     */
     private String convertToString(char[] cbuf) {
         String str = "";
         for(int i = 0; i < cbuf.length; i++)
@@ -66,6 +72,12 @@ public class CaesarReader extends FilterReader {
         return numberOfReadCharacters;
     }
     
+    /**
+     * this method decrypts a given message
+     * @param str
+     *            message to be decrypted
+     * @return the decrypted message
+     */
     private String decrypt(String str) {
         String cryptedMessage = "";
         int newShift = specialAlphabet.length - shift;
@@ -81,6 +93,7 @@ public class CaesarReader extends FilterReader {
     /**
      * this method looks for the position of the character in the specialAlphabet 
      * @param character
+     *                  the character to look for
      * @return the index of the character in the specialAlphabet, if it was found. Otherwise -1 will be returned.
      */
     private int getIndexOfCharInSpecialAlphabet(char character) {
