@@ -112,12 +112,8 @@ public class Touristenflugzeug implements Plane {
 			// period of time where the plain is in mid-air and not yet in reach of final destination
 			// it should neither ascend over the maximum height nor descend below the minimum height
 			else if(!doorOpen && coveredDistance >= 2){
-				if(coveredDistance >= newRoute.getreachCity() && coveredDistance <= newRoute.getpassCity()){
-					if(height + additionalHeight < newRoute.getcityHeight())
-						throw new PlaneTooLowException(height);	
-				}
-				else if(height + additionalHeight < newRoute.getminHeight())
-					throw new PlaneTooLowException(height);
+				if(height + additionalHeight < newRoute.getminHeight())
+					throw new PlaneTooLowException(height);	
 				else if(height + additionalHeight > newRoute.getmaxHeight())
 					throw new PlaneTooHighException(height);
 				

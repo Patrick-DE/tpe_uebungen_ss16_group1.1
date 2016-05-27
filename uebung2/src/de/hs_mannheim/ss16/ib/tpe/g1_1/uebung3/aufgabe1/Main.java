@@ -66,25 +66,13 @@ public class Main {
 			// Creates a new with values you can choose
 			// If the input is invalid the program will be terminated
 		case 1:
-			System.out.println("How far do you want to fly?");
+			System.out.println("How far do you want to fly(in km)?");
 			int distance = scanner.nextInt();
-			System.out.println("What is the minimum height?");
+			System.out.println("What is the minimum height(in m)?");
 			int minHeight = scanner.nextInt();
-			System.out.println("What is the maximum height?");
+			System.out.println("What is the maximum height(in m)?");
 			int maxHeight = scanner.nextInt();
-			System.out.println("Is the plane flying over a city? Press 1 for yes and 2 for no.");
-			int decision = scanner.nextInt();
-			if(decision == 1){
-				System.out.println("What is the minimum height over the city?");
-				int cityHeight = scanner.nextInt();
-				System.out.println("How many kilometers has the plane flown when it reaches the city?");
-				int reachCity = scanner.nextInt();
-				System.out.println("How many kilometers has the plane flown when it passes the city?");
-				int passCity = scanner.nextInt();
-				route = new FlightRoute(distance,minHeight,maxHeight,cityHeight,reachCity,passCity);
-			}
-			else if(decision == 2)
-				route = new FlightRoute(distance,minHeight,maxHeight);			
+			route = new FlightRoute(distance,minHeight,maxHeight);			
 			newPlane = new Touristenflugzeug(0, false, false, true, 0,route);
 			break;
 		case 2:
@@ -175,7 +163,7 @@ public class Main {
 			// The user decides how much the plain should ascend in the next kilometer
 			// Exceptions are being thrown in certain cases. More detailed in the javadoc for fly next Kilometer.
 		case 10:
-			System.out.println("How much do you want the plain to ascend in the course of the next kilometer?");
+			System.out.println("How many meters do you want the plain to ascend in the course of the next kilometer?");
 			int additionalHeight = scanner.nextInt();
 			try{
 				newPlane.flyNextKilometer(additionalHeight);
@@ -280,7 +268,7 @@ public class Main {
 				System.out.println("Occurences of NullPointerException: " + counterNullPointerException);
 			}
 			System.out.println("Are you sure you want to exit the simulation? Enter 1 for yes and 2 for no");
-			decision = scanner.nextInt();
+			int decision = scanner.nextInt();
 			if(decision == 1)
 				System.exit( 0 );
 			else
