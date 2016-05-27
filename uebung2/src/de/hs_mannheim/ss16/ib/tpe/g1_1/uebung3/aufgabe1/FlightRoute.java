@@ -69,6 +69,8 @@ public class FlightRoute {
 		else
 			this.maxHeight = maxHeight;
 	}
+
+
 	
 	public void setreachCity(int reachCity)throws SimulatorConfigurationException  {
 			this.reachCity = reachCity;
