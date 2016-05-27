@@ -223,7 +223,8 @@ public class CaesarFileEncryptor implements IFileEncryptor {
                             txt_files[nextFreeIndex(txt_files)] = files[i];
                     } else {
                         File[] txtfilesOfSubfolder = getTxtFiles(files[i]);
-                        add(txt_files, txtfilesOfSubfolder);
+                        if (txtfilesOfSubfolder != null)
+                            add(txt_files, txtfilesOfSubfolder);
                     }
                 }
                 return txt_files;
