@@ -9,7 +9,6 @@ public class FlightRoute {
 	private int reachCity = 0;
 	private int passCity = 0;
 	
-	//constructor in case the plane flies over a city
 	FlightRoute(int kilometer, int minHeight, int maxHeight) {
 		try{
 		setKilometer(kilometer);
