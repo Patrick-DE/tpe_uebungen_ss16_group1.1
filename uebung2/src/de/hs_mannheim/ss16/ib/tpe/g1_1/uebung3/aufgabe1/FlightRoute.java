@@ -6,7 +6,7 @@ public class FlightRoute {
 	private int kilometer = 0;
 	private int minHeight = 0;
 	private int maxHeight = 0;
-	private int reachCity = 2;
+	private int reachCity = 0;
 	private int passCity = 0;
 	
 	//constructor in case the plane flies over a city
