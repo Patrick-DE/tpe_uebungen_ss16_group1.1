@@ -1,3 +1,11 @@
 Aufgabe1:
 Exceptions - Theorie
 Erklären Sie die catch-or-throw-Regel anhand eines einfachen selbst entworfenen Beispiels.
+
+Try-Catch ist eine Art Außnahmen, also Zustände die durch eine nicht korrekte Verwendung eines Programms hervorgerufen werden, zu behandeln.
+Sobald die Ausnahme eintritt, wird versucht, den Fehler zu behandeln. Fals eine Try/Catch Anweisung vorhanden ist wird dies
+gemacht. Falls jedoch keine Try/Catch vorhanden ist, gibt es noch die möglichkeit über throws die Anweisungen an das
+oberprogramm die Fehlerbehandlung weiterzuleiten.
+Das Beispiel:
+
+
