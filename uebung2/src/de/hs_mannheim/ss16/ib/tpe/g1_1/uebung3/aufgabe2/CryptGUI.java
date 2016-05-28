@@ -38,12 +38,13 @@ public class CryptGUI extends JFrame implements ActionListener{
 	static private final String newline = "\n";
 	private final JPanel contentPanel = new JPanel();
 	private JTextArea informationField;
+	private JTextArea decryptMe;
 	private JTextArea encryptMe;
 	private JTextField key;
 	final JFileChooser fc = new JFileChooser();
 	private JTextField pathVar;
 	private File file;
-	private File destinationFile;
+	private File encryptedFile;
 	
 	/**
 	 * Launch the application.
@@ -81,7 +82,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 	 * Create the frame.
 	 */
 	public CryptGUI() {
-		setBounds(100, 100, 500, 302);
+		setBounds(100, 100, 860, 302);
 		getContentPane().setLayout(new BorderLayout());
 		{/*
 			JMenuBar menuBar = new JMenuBar();
@@ -115,7 +116,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JButton btnChooseAFile = new JButton("Choose a File or Folder");
+		JButton btnChooseAFile = new JButton("Choose a File for decryption");
 		btnChooseAFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Handle open button action.
@@ -143,7 +144,26 @@ public class CryptGUI extends JFrame implements ActionListener{
 			key.setBounds(10, 53, 248, 20);
 			contentPanel.add(key);
 			key.setColumns(10);
+			
+			pathVar = new JTextField();
+	        pathVar.setToolTipText("path of the encrypted txt file");
+	        pathVar.setBounds(266, 53, 208, 20);
+	        contentPanel.add(pathVar);
+	        pathVar.setColumns(10);
 		}
+		
+		decryptMe = new JTextArea(5,20);
+		decryptMe.setWrapStyleWord(true);
+		decryptMe.setToolTipText("decrypted text will be shown here");
+		decryptMe.setEditable(false);
+		/*SCROLL*/
+		JScrollPane scroll = new JScrollPane(decryptMe);
+		scroll.setLocation(10, 98);
+		scroll.setSize(300, 122);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setVisible(true);
+		contentPanel.add(scroll);
+		
 		informationField = new JTextArea(5,20);
 		informationField.setWrapStyleWord(true);
 		informationField.setToolTipText("Information");
@@ -151,28 +171,23 @@ public class CryptGUI extends JFrame implements ActionListener{
 //		informationField.setBounds(10, 105, 248, 115);
 		
 		/*SCROLL*/
-		JScrollPane scroll = new JScrollPane (informationField);
-		scroll.setLocation(10, 98);
-		scroll.setSize(248, 122);
-	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setVisible(true);
-	    contentPanel.add(scroll);
+		JScrollPane scroll0 = new JScrollPane (informationField);
+		scroll0.setLocation(310, 98);
+		scroll0.setSize(225, 122);
+	    scroll0.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll0.setVisible(true);
+	    contentPanel.add(scroll0);
 		
-		pathVar = new JTextField();
-		pathVar.setToolTipText("Speicherort der zu verschlüsselnden Datei");
-		pathVar.setBounds(266, 53, 208, 20);
-		contentPanel.add(pathVar);
-		pathVar.setColumns(10);
 		
 		encryptMe = new JTextArea(5, 20);
 		encryptMe.setWrapStyleWord(true);
-		encryptMe.setToolTipText("Encrypt me");
+		encryptMe.setToolTipText("enter the text you want to encrypt here");
 		encryptMe.setEditable(true);
-		encryptMe.setBounds(268, 99, 206, 121);
+//		encryptMe.setBounds(268, 99, 206, 121);
 		/*SCROLL*/
 		JScrollPane scroll1 = new JScrollPane (encryptMe);
-		scroll1.setLocation(268, 98);
-		scroll1.setSize(206, 122);
+		scroll1.setLocation(535, 98);
+		scroll1.setSize(300, 122);
 	    scroll1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll1.setVisible(true);
 	    contentPanel.add(scroll1);
@@ -195,14 +210,14 @@ public class CryptGUI extends JFrame implements ActionListener{
 						        if (isExistingTxtFile(file.getPath())) {
 						            int shift = Integer.parseInt(key.getText());
 						            CaesarReader reader = new CaesarReader(new FileReader(file.getPath()), shift);
-						            informationField.setText("");
+						            decryptMe.setText("");
 						            informationField.append("[" + file.getPath() + "]: Decryption starts." + newline);
 						            int sign = reader.read();
 						            while (sign != -1) {
-						                informationField.append("" + (char) sign);
+						                decryptMe.append("" + (char) sign);
 						                sign = reader.read();
 						            }
-                                    informationField.append(newline + "[" + file.getPath() + "]: Decryption successful." + newline);
+                                    informationField.append("[" + file.getPath() + "]: Decryption successful." + newline);
 						            reader.close();
 						        } else {
 						            informationField.append(("[" + file.getPath() + "] is not a txt file. Choose another file."));
@@ -284,19 +299,22 @@ public class CryptGUI extends JFrame implements ActionListener{
 					                    } else {
 					                        new File(path).getParentFile().mkdirs();
 					                    }
-					                    
 
-                                        int shift = Integer.parseInt(key.getText());
-                                        CaesarWriter writer = new CaesarWriter(new FileWriter(path), shift);
-                                        
-                                        writer.write(encryptMe.getText());
-                                        writer.close();
+
+					                    int shift = Integer.parseInt(key.getText());
+					                    CaesarWriter writer = new CaesarWriter(new FileWriter(path), shift);
+
+					                    informationField.append("Encryption starts." + newline);
+					                    writer.write(encryptMe.getText());
+					                    informationField.append("Encryption successful." + newline);
+					                    encryptedFile = new File(path);
+					                    writer.close();
+					                } else {
+					                    informationField.append("[" + path + "] does not equal a path of a txt file");
+					                }
 					            } else {
-					                informationField.append("[" + path + "] does not equal a path of a txt file");
+					                informationField.append("You have to enter the path of a txt file." + newline);
 					            }
-					        } else {
-					            informationField.append("You have to enter the path of a txt file." + newline);
-					        }
 					        } catch (FileNotFoundException e1) {
 					            informationField.append("[" + path + "] is no txt file." + newline);
 					        } catch (NumberFormatException e1) {
@@ -351,6 +369,22 @@ public class CryptGUI extends JFrame implements ActionListener{
 						}
 					});
 					buttonPane.add(encrypt);
+				}
+				{
+				    JButton showEncryptedFile = new JButton("Open encrypted txt file");
+				    showEncryptedFile.addActionListener(new ActionListener(){
+				        public void actionPerformed(ActionEvent args0) {
+				                try {
+                                    Runtime.getRuntime().exec("explorer.exe " + encryptedFile.getPath());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (NullPointerException e) {
+                                    informationField.append("You have not encrypted your current path or entered a acceptable path yet." + newline);
+                                }
+				            
+				        }
+				    });
+				    buttonPane.add(showEncryptedFile);
 				}
 			}
 		}
