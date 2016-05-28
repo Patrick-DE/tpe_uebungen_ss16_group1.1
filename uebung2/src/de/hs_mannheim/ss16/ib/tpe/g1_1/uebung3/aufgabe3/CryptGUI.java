@@ -133,7 +133,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 		{
 			key = new JTextField();
 			key.setToolTipText("Decrytion / Encryption Key");
-			key.setBounds(10, 53, 248, 20);
+			key.setBounds(10, 55, 248, 20);
 			contentPanel.add(key);
 			key.setColumns(10);
 		}
@@ -149,6 +149,15 @@ public class CryptGUI extends JFrame implements ActionListener{
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setVisible(true);
         contentPanel.add(scroll);
+        {
+        	JLabel lblNewLabel = new JLabel("Crypter logs");
+        	scroll.setColumnHeaderView(lblNewLabel);
+        }
+        {
+        	JLabel label = new JLabel("Masterkey");
+        	label.setBounds(10, 42, 66, 14);
+        	contentPanel.add(label);
+        }
 //		contentPanel.add(informationField);
 //		informationField.setColumns(30);
 		{
@@ -165,10 +174,6 @@ public class CryptGUI extends JFrame implements ActionListener{
 						    String ergebnistext = null;
 						    if (file != null) {
 						        try {
-						            /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
-								eingegeben = eingabe.getText();
-						             */
-
 						            int shift = Integer.parseInt(key.getText());
 //						            file = fc.getSelectedFile();
 						            informationField.append("[" + file.getPath() + "]: Decryption starts" + newline);
@@ -233,10 +238,6 @@ public class CryptGUI extends JFrame implements ActionListener{
 					        String ergebnistext = null;
 					        if (file != null) {
 					            try {
-					                /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
-								eingegeben = eingabe.getText();
-					                 */
-
 					                int shift = Integer.parseInt(key.getText());
 //                                    file = fc.getSelectedFile();
                                     informationField.append("[" + file.getPath() + "]: Encryption starts" + newline);

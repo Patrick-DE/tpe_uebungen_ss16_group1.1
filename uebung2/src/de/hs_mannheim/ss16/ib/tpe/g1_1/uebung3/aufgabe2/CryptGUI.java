@@ -164,6 +164,9 @@ public class CryptGUI extends JFrame implements ActionListener{
 		scroll.setVisible(true);
 		contentPanel.add(scroll);
 		
+		JLabel lblMessageToDecrypt = new JLabel("Message to decrypt:");
+		scroll.setColumnHeaderView(lblMessageToDecrypt);
+		
 		informationField = new JTextArea(5,20);
 		informationField.setWrapStyleWord(true);
 		informationField.setToolTipText("Information");
@@ -177,6 +180,9 @@ public class CryptGUI extends JFrame implements ActionListener{
 	    scroll0.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll0.setVisible(true);
 	    contentPanel.add(scroll0);
+	    
+	    JLabel lblLog = new JLabel("Debug logs");
+	    scroll0.setColumnHeaderView(lblLog);
 		
 		
 		encryptMe = new JTextArea(5, 20);
@@ -191,6 +197,17 @@ public class CryptGUI extends JFrame implements ActionListener{
 	    scroll1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll1.setVisible(true);
 	    contentPanel.add(scroll1);
+	    
+	    JLabel lblEncryptMe = new JLabel("Message to encrypt:");
+	    scroll1.setColumnHeaderView(lblEncryptMe);
+	    
+	    JLabel lblMasterkey = new JLabel("Masterkey");
+	    lblMasterkey.setBounds(10, 39, 66, 14);
+	    contentPanel.add(lblMasterkey);
+	    
+	    JLabel lblPathForStoring = new JLabel("Path for storing the encrypted file");
+	    lblPathForStoring.setBounds(266, 39, 208, 14);
+	    contentPanel.add(lblPathForStoring);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -232,12 +249,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 						    
 						    /*
 						    if (fc.getSelectedFile() != null) {
-						        try {
-						            /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
-								eingegeben = eingabe.getText();
-						             *
-
-						            
+						        try {						            
 						            
 						            ////////////////////////////////
 						            int shift = Integer.parseInt(key.getText());
@@ -326,10 +338,6 @@ public class CryptGUI extends JFrame implements ActionListener{
 					        /*
 					        if (fc.getSelectedFile() != null) {
 					            try {
-					                /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
-								eingegeben = eingabe.getText();
-					                 *
-
 					                int shift = Integer.parseInt(key.getText());
                                     File file = fc.getSelectedFile();
                                     informationField.append(file.getPath() + ": Encryption starts" + newline);
