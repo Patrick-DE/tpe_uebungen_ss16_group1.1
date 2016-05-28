@@ -7,6 +7,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
@@ -27,6 +30,7 @@ import javax.swing.JToolBar;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+
 import java.awt.Dimension;
 
 public class CryptGUI extends JFrame implements ActionListener{
@@ -34,9 +38,13 @@ public class CryptGUI extends JFrame implements ActionListener{
 	static private final String newline = "\n";
 	private final JPanel contentPanel = new JPanel();
 	private JTextArea informationField;
+	private JTextArea encryptMe;
 	private JTextField key;
 	final JFileChooser fc = new JFileChooser();
 	private JTextField pathVar;
+	private File file;
+	private File destinationFile;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -116,7 +124,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 			        int returnVal = fc.showOpenDialog(CryptGUI.this);
 			        informationField.setText("");
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
-			            File file = fc.getSelectedFile();
+			            file = fc.getSelectedFile();
 			            //This is where a real application would open the file.
 			            informationField.append("Opening: " + file.getName() + "." + newline);
 			        } else {
@@ -156,7 +164,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 		contentPanel.add(pathVar);
 		pathVar.setColumns(10);
 		
-		JTextArea encryptMe = new JTextArea(5, 20);
+		encryptMe = new JTextArea(5, 20);
 		encryptMe.setWrapStyleWord(true);
 		encryptMe.setToolTipText("Encrypt me");
 		encryptMe.setEditable(true);
@@ -180,12 +188,43 @@ public class CryptGUI extends JFrame implements ActionListener{
 						public void actionPerformed(ActionEvent arg0) {
 						    String eingegeben = null;
 						    String ergebnistext = null;
+						    
+
+
+						    try {
+						        if (isExistingTxtFile(file.getPath())) {
+						            int shift = Integer.parseInt(key.getText());
+						            CaesarReader reader = new CaesarReader(new FileReader(file.getPath()), shift);
+						            informationField.setText("");
+						            informationField.append("[" + file.getPath() + "]: Decryption starts." + newline);
+						            int sign = reader.read();
+						            while (sign != -1) {
+						                informationField.append("" + (char) sign);
+						                sign = reader.read();
+						            }
+                                    informationField.append(newline + "[" + file.getPath() + "]: Decryption successful." + newline);
+						            reader.close();
+						        } else {
+						            informationField.append(("[" + file.getPath() + "] is not a txt file. Choose another file."));
+						        }
+						    } catch (NumberFormatException e) {
+						        informationField.append("You have to enter an integer value as decryption key." + newline);
+						    } catch (FileNotFoundException e) {
+						        informationField.append("No txt file chosen to decrypt. Choose a txt file." + newline);
+						    } catch (IOException e) {
+						        informationField.append(newline + "Something went wrong while decrypting.");
+						    }
+						    
+						    /*
 						    if (fc.getSelectedFile() != null) {
 						        try {
 						            /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
 								eingegeben = eingabe.getText();
-						             */
+						             *
 
+						            
+						            
+						            ////////////////////////////////
 						            int shift = Integer.parseInt(key.getText());
 						            File file = fc.getSelectedFile();
 						            informationField.append(file.getPath() + ": Decryption starts" + newline);
@@ -209,7 +248,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 						                 * JBUTTON MUSS IN DIESEM ELSE BLOCK ERZEUGT WERDEN, 
 						                 * WEIL DER ORDNER NUR ANGEZEIGT WERDEN SOLL, WENN ER AUCH WIRKLICH NACH ERFOLGREICHEM
 						                 * ENTSCHLÜSSELN EXISTIERT
-						                 */
+						                 *
 						                
 						            }
 						        } catch (IOException e) {
@@ -222,7 +261,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 						        }
 						    } else {
 						        informationField.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
-						    }
+						    }*/
 						}
 					});
 					buttonPane.add(decrypt);
@@ -233,11 +272,45 @@ public class CryptGUI extends JFrame implements ActionListener{
 					    public void actionPerformed(ActionEvent e) {
 					        String eingegeben = null;
 					        String ergebnistext = null;
+					        
+					        informationField.setText("");
+					        String path = pathVar.getText();
+					        try {
+					            if (path != null || !path.equals("")) {
+					                if (pathEndsWith(path, ".txt")) {
+					                    if (new File(path).exists() || new File(path).getParent() != null) {
+					                        int shift = Integer.parseInt(key.getText());
+					                        CaesarWriter writer = new CaesarWriter(new FileWriter(path), shift);
+					                    } else {
+					                        new File(path).getParentFile().mkdirs();
+					                    }
+					                    
+
+                                        int shift = Integer.parseInt(key.getText());
+                                        CaesarWriter writer = new CaesarWriter(new FileWriter(path), shift);
+                                        
+                                        writer.write(encryptMe.getText());
+                                        writer.close();
+					            } else {
+					                informationField.append("[" + path + "] does not equal a path of a txt file");
+					            }
+					        } else {
+					            informationField.append("You have to enter the path of a txt file." + newline);
+					        }
+					        } catch (FileNotFoundException e1) {
+					            informationField.append("[" + path + "] is no txt file." + newline);
+					        } catch (NumberFormatException e1) {
+					            informationField.append("You have to enter an integer value as encryption key." + newline);
+					        } catch (IOException e1) {
+					            informationField.append(newline + "Something went wrong while encrypting.");
+					        }
+					        
+					        /*
 					        if (fc.getSelectedFile() != null) {
 					            try {
 					                /* AUSKOMMENTIERT; WEIL ICH NICHT WEISS WOZU DIE ZEILE DA IST
 								eingegeben = eingabe.getText();
-					                 */
+					                 *
 
 					                int shift = Integer.parseInt(key.getText());
                                     File file = fc.getSelectedFile();
@@ -262,7 +335,7 @@ public class CryptGUI extends JFrame implements ActionListener{
                                          * JBUTTON MUSS IN DIESEM ELSE BLOCK ERZEUGT WERDEN, 
                                          * WEIL DER ORDNER NUR ANGEZEIGT WERDEN SOLL, WENN ER AUCH WIRKLICH NACH ERFOLGREICHEM
                                          * VERSCHLÜSSELN EXISTIERT
-                                         */
+                                         *
                                     }
 					            } catch (IOException e1) {
 
@@ -274,7 +347,7 @@ public class CryptGUI extends JFrame implements ActionListener{
 					            }
 					        } else {
 					            informationField.append("No directory to encrypt / decrypt chosen. Choose a directory" + newline);
-					        }
+					        }*/
 						}
 					});
 					buttonPane.add(encrypt);
@@ -282,6 +355,38 @@ public class CryptGUI extends JFrame implements ActionListener{
 			}
 		}
 	}
+	
+	private boolean isExistingTxtFile(String path) throws FileNotFoundException {
+	    if (file == null || !new File(path).exists())
+	       throw new FileNotFoundException();
+	    if (new File(path).isDirectory() || !new File(path).isFile() || !pathEndsWith(path, ".txt"))
+	        return false;
+	    else
+	        return true;
+	}
+	
+    /**
+     * this method checks, if a path has specified ending
+     * @param path path to be checked
+     * @param ending the suffix of the path
+     * @return true, if 'path' ends with 'ending'. Otherwise false 
+     */
+    private boolean pathEndsWith(String path, String ending) {
+
+        int numberOfCorrectLetters = 0;
+        if (path.length() <= ending.length() || ending.length() < 4)
+            return false;
+        
+        for (int i = path.length() - ending.length(), j = 0; i < path.length(); i++, j++) {
+            if (path.charAt(i) == ending.charAt(j))
+                numberOfCorrectLetters++;    
+        }
+        
+        if (numberOfCorrectLetters == ending.length())
+            return true;
+        else
+            return false;
+    }
 	
 	public JTextArea getErgebnis() {
 	    return informationField;
