@@ -3,9 +3,19 @@ Exceptions - Theorie
 Erklären Sie die catch-or-throw-Regel anhand eines einfachen selbst entworfenen Beispiels.
 
 Try-Catch ist eine Art Außnahmen, also Zustände die durch eine nicht korrekte Verwendung eines Programms hervorgerufen werden, zu behandeln.
-Sobald die Ausnahme eintritt, wird versucht, den Fehler zu behandeln. Fals eine Try/Catch Anweisung vorhanden ist wird dies
-gemacht. Falls jedoch keine Try/Catch vorhanden ist, gibt es noch die möglichkeit über throws die Anweisungen an das
-oberprogramm die Fehlerbehandlung weiterzuleiten.
-Das Beispiel:
+Sobald die Ausnahme eintritt, wird versucht, den Fehler zu behandeln. Fals eine Try/Catch Anweisung vorhanden ist wird die Ausnahme durch den catch
+Block abgefangen. Falls jedoch keine Try/Catch vorhanden ist oder in der Try/Catch nicht alle Exceptions gefangen werden, gibt es noch die Möglichkeit über throws die Anweisungen an das
+Oberprogramm  weiterzuleiten und die Fehlerbehandlung dort fortzusetzen.
 
+Das Beispiel:
+Das dazugehörige Beispiel ist die Klasse CatchOrThrow. 
+Diese beinhaltet eine Main und zwei weitere Methoden(throwException und throwException2).
+Die Methode throwException2 wirft zwei verschiedene Exceptions. 
+Es ist dem User überlassen welche der beiden Exceptions schlussendlich geworfen wird.
+ThrowException2 wird in throwException aufgerufen, welche widerum durch die main aufgerufen wird.
+Die Catch or Throw Regel äußert sich insofern, als in throwException nur eine der beiden durch ThrowException2 geworfenen Exceptions gecatcht wird(SimulatorConfigurationException).
+Damit die Catch or Throw Regel eingehalten wird, muss nun in der äußeren catch Anweisung die andere Exception gecatcht werden(GeneralFlightException).
+Dies wird in der main getan. Nur so ist das Programm kompilierbar.
+In throwException wird also SimulatorConfigurationException gecatcht und GeneralFlightException weitergeworfen. 
+Diese wird dann in der main gecatcht.
 
