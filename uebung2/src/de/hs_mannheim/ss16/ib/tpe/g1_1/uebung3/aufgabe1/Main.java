@@ -24,7 +24,7 @@ public class Main {
 		}
 
 	}
-	// Compares two strings to determine whether all their letters are equal1
+	// Compares two strings to determine whether all their letters are equal
 	public static boolean equals(String x,String y){
 		boolean equals = true;
 		if(x.length() != y.length())
