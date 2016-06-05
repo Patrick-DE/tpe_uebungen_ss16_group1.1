@@ -5,17 +5,19 @@ public class Main {
 
 	public static void main(String[] args) {
 		Ringpuffer puffer = new Ringpuffer(5);
-		TimerThread time = new TimerThread(5*1000);
+		TimerThread time = new TimerThread(100);
 		ErzeugerThread one = new ErzeugerThread(puffer,200,time);
 		ErzeugerThread two = new ErzeugerThread(puffer,100,time);
 		ErzeugerThread three = new ErzeugerThread(puffer,50,time);
 		VerbraucherThread four = new VerbraucherThread(puffer,75,time);
 		VerbraucherThread five = new VerbraucherThread(puffer,40,time);
+		time.start();
 		one.start();
 		two.start();
 		three.start();
 		four.start();
 		five.start();
+	
 	}
 
 }

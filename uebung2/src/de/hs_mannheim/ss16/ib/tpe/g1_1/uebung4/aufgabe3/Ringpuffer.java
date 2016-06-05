@@ -10,16 +10,7 @@ public class Ringpuffer {
 	}
 
 	synchronized public void put(Object put){
-		puffer[putPosition] = put;
-		putPosition++;
-		if(isPufferFull()){
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				notifyAll();
-			}
-		}
-		else if(puffer[putPosition] != null){
+		if(putPosition < puffer.length && puffer[putPosition] != null){
 			for(int i = 0; i < puffer.length; i++){
 				if(puffer[i] == null){
 					puffer[i] = put;
@@ -27,11 +18,27 @@ public class Ringpuffer {
 				}
 			}
 		}
+		else if(putPosition < puffer.length){
+			puffer[putPosition] = put;
+			putPosition++;
+
+		}
+		else{
+			for(int i = 0;i < puffer.length;i++){
+				if(puffer[i] == null){
+					putPosition = i;
+					break;
+				}
+			}
+			puffer[putPosition] = put;
+			putPosition++;
+			
+		}
 	}
 	synchronized public Object get(){
 		Object get;
 		getPosition++;
-		if(getPosition == puffer.length || puffer [getPosition] == null){
+		if(getPosition >= puffer.length || puffer [getPosition] == null){
 			for(int i = 0;i < puffer.length;i++){
 				if(puffer [i] != null){
 					getPosition = i;
@@ -39,14 +46,8 @@ public class Ringpuffer {
 			}
 		}
 		get = puffer[getPosition];
-		if(isPufferEmpty()){
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				notifyAll();
-			}
-
-		}
+		puffer[getPosition] = null;
+		
 		return get;
 
 	}

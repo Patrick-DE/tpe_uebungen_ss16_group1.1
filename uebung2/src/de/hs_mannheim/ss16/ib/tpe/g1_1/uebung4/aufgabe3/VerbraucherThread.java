@@ -24,10 +24,13 @@ public class VerbraucherThread extends Thread {
 			if(!puffer.isPufferEmpty()){
 				int print = (Integer) puffer.get();
 				System.out.println(print);
+				synchronized(this){
+					this.notifyAll();
+				}
 			}
 			else{
 				try {
-					this.wait();
+					synchronized(this){ this.wait();}
 				} catch (InterruptedException e) {
 					System.out.println(getName() + " was interrupted. " +
 							"isInterrupted(): " + isInterrupted());

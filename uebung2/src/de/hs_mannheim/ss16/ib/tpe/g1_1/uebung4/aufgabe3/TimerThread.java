@@ -4,17 +4,22 @@ public class TimerThread extends Thread {
 	int duration;
 	
 	TimerThread(int sleepTime){
+		super();
 		duration = sleepTime;
 		
 	}
 	
 	public void run(){
 		try{
-			this.sleep(duration);
-		}
+			sleep(duration);
+					}
 		catch(InterruptedException e){
+			System.out.println(getName() + " was interrupted. " +
+					"isInterrupted(): " + isInterrupted());
 			
 		}
 		this.interrupt();
+
+		
 	}
 }
