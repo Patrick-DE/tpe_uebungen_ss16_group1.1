@@ -13,6 +13,7 @@ public class ErzeugerThread extends Thread {
 	}
 
 
+	@Override
 	public void run(){
 		Random rand = new Random(5);
 		try {
@@ -23,7 +24,9 @@ public class ErzeugerThread extends Thread {
 			return;
 		}
 
-		while(!isInterrupted() && !thread.isInterrupted()){
+		while(!isInterrupted()){
+			if(!thread.isAlive())
+				interrupt();
 			Integer random = rand.nextInt();
 			if(!puffer.isPufferFull()){
 				puffer.put(random);
@@ -42,7 +45,8 @@ public class ErzeugerThread extends Thread {
 
 
 	}
-	this.interrupt();
+	
+	System.out.println("Das Ende " + this.getName());
 
 }
 

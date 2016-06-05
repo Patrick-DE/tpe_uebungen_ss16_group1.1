@@ -7,6 +7,7 @@ public class TimerThread extends Thread {
 		super();
 		duration = sleepTime;
 		
+		
 	}
 	
 	public void run(){
@@ -18,7 +19,6 @@ public class TimerThread extends Thread {
 					"isInterrupted(): " + isInterrupted());
 			
 		}
-		this.interrupt();
 
 		
 	}

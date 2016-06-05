@@ -12,6 +12,7 @@ public class VerbraucherThread extends Thread {
 		this.thread = thread;
 	}
 	
+	@Override
 	public void run(){
 		try {
 			sleep(duration);
@@ -20,7 +21,9 @@ public class VerbraucherThread extends Thread {
 			"isInterrupted(): " + isInterrupted());
 			return;
 			}
-		while(!isInterrupted() && !thread.isInterrupted()){
+		while(!isInterrupted()){
+			if(!thread.isAlive())
+				interrupt();
 			if(!puffer.isPufferEmpty()){
 				int print = (Integer) puffer.get();
 				System.out.println(print);
@@ -39,7 +42,8 @@ public class VerbraucherThread extends Thread {
 			}
 			
 		}
-		this.interrupt();
+		System.out.println("Das Ende " + this.getName());
+		
 	}
 
 }

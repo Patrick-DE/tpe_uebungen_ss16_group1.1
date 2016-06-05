@@ -51,14 +51,14 @@ public class Ringpuffer {
 		return get;
 
 	}
-	public boolean isPufferEmpty() {
+	synchronized public boolean isPufferEmpty() {
 		for(int i = 0; i < puffer.length; i++){
 			if(puffer[i] != null)
 				return false;
 		}
 		return true;
 	}
-	public boolean isPufferFull(){
+	synchronized public boolean isPufferFull(){
 		for(int i = 0; i < puffer.length; i++){
 			if(puffer[i] == null)
 				return false;
