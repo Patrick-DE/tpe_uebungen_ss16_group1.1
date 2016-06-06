@@ -3,51 +3,38 @@ import java.util.*;
 public class ErzeugerThread extends Thread {
 	Ringpuffer puffer;
 	int duration;
-	TimerThread thread;
+	Random rand = new Random(5);
+	volatile Integer random = rand.nextInt();
 
-	ErzeugerThread(Ringpuffer puffer,int sleepTime,TimerThread thread){
+	ErzeugerThread(Ringpuffer puffer,int sleepTime){
 		super();
 		this.puffer = puffer;	
 		duration = sleepTime;
-		this.thread = thread;
 	}
 
 
 	@Override
-	public void run(){
-		Random rand = new Random(5);
-		try {
-			sleep(duration);
-		} catch (InterruptedException e) {
-			System.out.println(getName() + " was interrupted. " +
-					"isInterrupted(): " + isInterrupted());
-			return;
+	public  void run(){
+		while(!isInterrupted()){
+			try {
+				sleep(duration);
+			} catch (InterruptedException e) {
+				System.out.println(getName() + " was interrupted. " +
+						"isInterrupted(): " + isInterrupted());
+				return;
+			}
+
+			System.out.println(getName() + " - put: " + random);
+			puffer.put(random);
+			random = rand.nextInt();
 		}
 
-		while(!isInterrupted()){
-			if(!thread.isAlive())
-				interrupt();
-			Integer random = rand.nextInt();
-			if(!puffer.isPufferFull()){
-				puffer.put(random);
-				synchronized(this){this.notifyAll();}
-			}
-			else{
 
-				try {
-					synchronized(this){this.wait();}
-				} catch (InterruptedException e) {
-					System.out.println(getName() + " was interrupted. " +
-							"isInterrupted(): " + isInterrupted());
-					return;
-				}
-			}
 
+
+
+		System.out.println("Das Ende " + this.getName());
 
 	}
-	
-	System.out.println("Das Ende " + this.getName());
-
-}
 
 }

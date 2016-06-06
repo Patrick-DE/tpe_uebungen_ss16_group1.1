@@ -9,61 +9,63 @@ public class Ringpuffer {
 		puffer = new Object[pufferLength];
 	}
 
-	synchronized public void put(Object put){
-		if(putPosition < puffer.length && puffer[putPosition] != null){
-			for(int i = 0; i < puffer.length; i++){
-				if(puffer[i] == null){
-					puffer[i] = put;
-					break;
-				}
-			}
-		}
-		else if(putPosition < puffer.length){
+	 public synchronized void put(Object put){
+		putPosition = putPosition % puffer.length;
+		if(puffer[putPosition] == null){
 			puffer[putPosition] = put;
 			putPosition++;
-
+			notifyAll();
 		}
 		else{
-			for(int i = 0;i < puffer.length;i++){
-				if(puffer[i] == null){
-					putPosition = i;
-					break;
-				}
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				System.out.println("Thread is Waiting");
 			}
-			puffer[putPosition] = put;
-			putPosition++;
+		}
+
+		System.out.println(putPosition +" put");
 			
-		}
 	}
-	synchronized public Object get(){
-		Object get;
-		getPosition++;
-		if(getPosition >= puffer.length || puffer [getPosition] == null){
-			for(int i = 0;i < puffer.length;i++){
-				if(puffer [i] != null){
-					getPosition = i;
-				}
+	 public synchronized Object get(){
+		Object get = null;
+		getPosition = getPosition % puffer.length;
+		if(puffer[getPosition] != null){
+			get = puffer[getPosition];
+			puffer[getPosition] = null;
+			getPosition++;
+			notifyAll();
+		}
+		else{
+			try{
+				wait();
+			}
+			catch(InterruptedException e){
+				System.out.println("Thread is Waiting");
+			
+				
 			}
 		}
-		get = puffer[getPosition];
-		puffer[getPosition] = null;
 		
+		System.out.println(getPosition +" get");
 		return get;
+		
+		
 
 	}
-	synchronized public boolean isPufferEmpty() {
-		for(int i = 0; i < puffer.length; i++){
-			if(puffer[i] != null)
-				return false;
+	 public synchronized boolean isPufferEmpty() {
+		 getPosition = getPosition % puffer.length;
+		if(puffer[getPosition] == null){
+			return true;
 		}
-		return true;
+		return false;
 	}
-	synchronized public boolean isPufferFull(){
-		for(int i = 0; i < puffer.length; i++){
-			if(puffer[i] == null)
+	 public synchronized boolean isPufferFull(){
+		 putPosition = putPosition % puffer.length;
+		 if(puffer[putPosition] == null){
 				return false;
-		}
-		return true;
+			}
+		 return true;
 	}
 
 }
