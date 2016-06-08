@@ -1,67 +1,69 @@
 package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung4.aufgabe3;
 
 public class Ringpuffer {
-	int getPosition = 0,putPosition = 0;
+	volatile int getPosition = 0, putPosition = 0;
 	Object[] puffer;
 
-
-	public Ringpuffer(int pufferLength){
+	public Ringpuffer(int pufferLength) {
 		puffer = new Object[pufferLength];
 	}
 
-	synchronized public void put(Object put){
-		if(putPosition < puffer.length && puffer[putPosition] != null){
-			for(int i = 0; i < puffer.length; i++){
-				if(puffer[i] == null){
-					puffer[i] = put;
-					break;
-				}
-			}
-		}
-		else if(putPosition < puffer.length){
+	public synchronized void put(Object put) {
+		putPosition = putPosition % puffer.length;
+		System.out.println(putPosition + " put");
+		if (puffer[putPosition] == null) {
 			puffer[putPosition] = put;
 			putPosition++;
+			notifyAll();
+		} else {
+			try {
+				System.out.println("Thread is Waiting");
+				wait();
+			} catch (InterruptedException e) {
+				System.out.println("Thread is Waiting");
+			}
+		}
 
-		}
-		else{
-			for(int i = 0;i < puffer.length;i++){
-				if(puffer[i] == null){
-					putPosition = i;
-					break;
-				}
-			}
-			puffer[putPosition] = put;
-			putPosition++;
-			
-		}
+		
+
 	}
-	synchronized public Object get(){
-		Object get;
-		getPosition++;
-		if(getPosition >= puffer.length || puffer [getPosition] == null){
-			for(int i = 0;i < puffer.length;i++){
-				if(puffer [i] != null){
-					getPosition = i;
-				}
+
+	public synchronized Object get() {
+		Object get = null;
+		getPosition = getPosition % puffer.length;
+		System.out.println(getPosition + " get");
+		if (puffer[getPosition] != null) {
+			get = puffer[getPosition];
+			puffer[getPosition] = null;
+			getPosition++;
+			System.out.println("getPosition incremented " + getPosition);
+			notifyAll();
+		} else {
+			try {
+				System.out.println("Thread is Waiting");
+				wait();
+			} catch (InterruptedException e) {
+				System.out.println("Thread is Waiting");
+
 			}
 		}
-		get = puffer[getPosition];
-		puffer[getPosition] = null;
 		
 		return get;
 
 	}
-	synchronized public boolean isPufferEmpty() {
-		for(int i = 0; i < puffer.length; i++){
-			if(puffer[i] != null)
-				return false;
+
+	public synchronized boolean isPufferEmpty() {
+		getPosition = getPosition % puffer.length;
+		if (puffer[getPosition] == null) {
+			return true;
 		}
-		return true;
+		return false;
 	}
-	synchronized public boolean isPufferFull(){
-		for(int i = 0; i < puffer.length; i++){
-			if(puffer[i] == null)
-				return false;
+
+	public synchronized boolean isPufferFull() {
+		putPosition = putPosition % puffer.length;
+		if (puffer[putPosition] == null) {
+			return false;
 		}
 		return true;
 	}
