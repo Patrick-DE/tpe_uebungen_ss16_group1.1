@@ -7,8 +7,8 @@ public class QuickSort {
     public static void main(String[] args) {
 //      Testfelder für Quickort
 
-        int [] F;
-        F = new int[] {10, 4, 33, 44, 17, 20, 3, 2, 9, 82, 38, 67, 55, 11, 32, 23, 19, 7, 6, 14, 29}; // "zufälliges" Feld
+        Comparable [] F;
+        F = new Comparable[] {10, 4, 33, 44, 17, 20, 3, 2, 9, 82, 38, 67, 55, 11, 32, 23, 19, 7, 6, 14, 29}; // "zufälliges" Feld
 //      # Rekursionen: 14 # Vergleiche: 64  # Vertauschungen: 31
         
 //      F = new int [] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};  // F ist schon sortiert
@@ -37,10 +37,10 @@ public class QuickSort {
 //      F = new int [] {10, 1, 2, 3, 4, 5, 6, 7, 8, 9};  // F ist fast sortiert - das größte Element steht ganz links
 //      # Rekursionen: 7 # Vergleiche: 37  # Vertauschungen: 9  
 
-      F = new int [] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5};  // F ist sortiert - alle Elemente sind gleich
+      F = new Comparable [] {5, 5, 5, 5, 5, 5, 5, 5, 5, 5};  // F ist sortiert - alle Elemente sind gleich
 //      # Rekursionen: 8 # Vergleiche: 45  # Vertauschungen: 0
    
-        F = new int [] {2, 17, 23, 13, 18, 3, 19, 11, 14, 16, 8};       
+        F = new Comparable [] {2, 17, 23, 13, 18, 3, 19, 11, 14, 16, 8};       
         int[] totalSwapsComparisonsAndCalls = new int[3];
         char decision;
         boolean wantDemonstration;
@@ -71,9 +71,9 @@ public class QuickSort {
             println("Vergleiche (insgesamt): " + totalSwapsComparisonsAndCalls[1]);
             println("Rekursion (insgesamt): " + totalSwapsComparisonsAndCalls[2]);
         } else {
-            int[] array1024 = new int[1024];
-            int[] array2048 = new int[2048];
-            int[] array4096 = new int[4096];
+            Comparable[] array1024 = new Comparable[1024];
+            Comparable[] array2048 = new Comparable[2048];
+            Comparable[] array4096 = new Comparable[4096];
             int[] totalSwapsComparisonsAndCalls1024 = new int[3];
             int[] totalSwapsComparisonsAndCalls2048 = new int[3];
             int[] totalSwapsComparisonsAndCalls4096 = new int[3];
@@ -167,7 +167,7 @@ public class QuickSort {
      * @param wantDemonstration this parameter determines, whether the array 
      *                          will be used for the demonstration or the complexity experiment
      */
-    static void fillUnsortedArray(int[] array, boolean wantDemonstration) {
+    static void fillUnsortedArray(Comparable[] array, boolean wantDemonstration) {
 
         int maxValue;
         if (wantDemonstration)
@@ -184,7 +184,7 @@ public class QuickSort {
      * this method prints the array on the console
      * @param array
      */
-    static void printArray(int[] array) {
+    static void printArray(Comparable[] array) {
         for (int i = 0; i < array.length; i++) {
             print(array[i] + "  ");
         }
@@ -200,7 +200,7 @@ public class QuickSort {
      * @param firstCall shows, whether the current call is the first call of the method or not
      * @return
      */
-    static int[] quickSort(int[] array, int startIndex, int endIndex, int[] totalSwapsComparisonsAndCalls, boolean wantDemonstration, boolean firstCall) {
+    static int[] quickSort(Comparable[] array, int startIndex, int endIndex, int[] totalSwapsComparisonsAndCalls, boolean wantDemonstration, boolean firstCall) {
 
         if (wantDemonstration)
             println("Quicksort-Bereich: " + startIndex + " bis " + endIndex);
@@ -215,7 +215,7 @@ public class QuickSort {
             int pivotPosition;
             int index = startIndex;
             int pivotIndex = endIndex;
-            int pivotNumber = array[pivotIndex];
+            Comparable pivotNumber = array[pivotIndex];
             int swapCounter = 0;
             int comparisonCounter = 0;
 
@@ -224,7 +224,7 @@ public class QuickSort {
                 boolean swapped = false;
                 int vectorMarker = -1; // only relevant, if wantDemonstration is true. Marks the index of a swapped number
                 int indexMarker = -1; // only relevant, if wantDemonstration is true. Marks the index of a swapped number
-                if (array[vector] <= pivotNumber) {
+                if (array[vector].compareTo(pivotNumber) <= 0) {
                     vectorMarker = vector;
                     indexMarker = index;
                     if (vector != index) {
@@ -347,9 +347,9 @@ public class QuickSort {
      * @param index0 represents the position of a number
      * @param index1 represents the position of a number
      */
-    static void swap(int[] array, int index0, int index1) {
+    static void swap(Comparable[] array, int index0, int index1) {
 
-        int cache = array[index1];
+        Comparable cache = array[index1];
         array[index1] = array[index0];
         array[index0] = cache;
     }
