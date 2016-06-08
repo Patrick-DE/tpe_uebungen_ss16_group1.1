@@ -21,9 +21,16 @@ public class VerbraucherThread extends Thread {
 						"isInterrupted(): " + isInterrupted());
 				return;
 			}
-			int print = (Integer) puffer.get();
-			System.out.println(getName() + " - get: " + print);
-			System.out.println("get " + print);
+			
+			try{
+				int print = (Integer) puffer.get();
+				System.out.println(getName() + " - get: " + print);
+				System.out.println("get " + print);
+			}
+			catch(NullPointerException e){
+				
+			}
+			
 		}
 
 

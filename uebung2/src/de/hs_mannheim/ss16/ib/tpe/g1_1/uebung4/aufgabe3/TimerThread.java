@@ -7,7 +7,7 @@ public class TimerThread extends Thread {
 	ErzeugerThread one = new ErzeugerThread(puffer, 200);
 	ErzeugerThread two = new ErzeugerThread(puffer, 100);
 	ErzeugerThread three = new ErzeugerThread(puffer, 50);
-	VerbraucherThread four = new VerbraucherThread(puffer, 75);
+	VerbraucherThread four = new VerbraucherThread(puffer, 50);
 	VerbraucherThread five = new VerbraucherThread(puffer, 60);
 
 	TimerThread(int sleepTime) {
