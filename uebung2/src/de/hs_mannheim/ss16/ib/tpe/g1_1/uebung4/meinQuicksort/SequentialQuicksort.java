@@ -1,8 +1,5 @@
 package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung4.meinQuicksort;
 
-import static gdi.MakeItSimple.print;
-import static gdi.MakeItSimple.println;
-
 public class SequentialQuicksort implements SortAlgorithm {
 
     private static final int threadCounter = 1; // non multithreaded Quicksort. So only 1 thread
@@ -147,10 +144,10 @@ public class SequentialQuicksort implements SortAlgorithm {
                             System.out.print("] ");
                     }    
                 }
-                println();
-                println("Vertauschungen (insgesamt): " + swapCounter);
-                println("Vergleiche(insgesamt): " + comparisonCounter);
-                println();
+                System.out.println("");
+                System.out.println("Vertauschungen (insgesamt): " + swapCounter);
+                System.out.println("Vergleiche(insgesamt): " + comparisonCounter);
+                System.out.println("");
             }
 
             this.swapCounter += swapCounter;
