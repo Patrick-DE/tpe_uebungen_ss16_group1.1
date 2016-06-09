@@ -2,6 +2,7 @@ package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung4.meinQuicksort;
 
 import java.util.Scanner;
 
+
 public class Main {
 
     public static void main(String[] args) {

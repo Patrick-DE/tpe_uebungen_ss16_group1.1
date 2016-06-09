@@ -46,10 +46,10 @@ public class QuickSort {
         boolean wantDemonstration;
 
         do {
-            println("Wollen Sie eine Beispielvorf�hrung an einem der vorgegebenen Arrays 'F's"
+            println("Wollen Sie eine Beispielvorfuehrung an einem der vorgegebenen Arrays 'F's"
                     + " oder das Komplexitaetsexperiment an den grossen Arrays (1024, 2048, 4096) ?");
-            println("'1' fuer Beispielausf�hrung");
-            println("'2' fuer Komplexit�tsexperiment");
+            println("'1' fuer Beispielausfuehrung");
+            println("'2' fuer Komplexituetsexperiment");
             decision = readChar();
             readLine();
         } while (!(decision == '1' || decision == '2'));
@@ -162,7 +162,7 @@ public class QuickSort {
 
     /**
      * this method fills a void array with random values
-     * all commands, which are dependent from wantDemonstration does not affect the functional principle of this method
+     * all commands, which are dependent on wantDemonstration do not affect the functional principle of this method
      * @param array
      * @param wantDemonstration this parameter determines, whether the array 
      *                          will be used for the demonstration or the complexity experiment
