@@ -15,7 +15,9 @@ public class ErzeugerThread extends Thread {
 
 	@Override
 	public  void run(){
+		// Condition is !isInterrupted so that run terminates when thread is interrupted in timerThread
 		while(!isInterrupted()){
+			// Sleeps for the given duration so that staggered execution of threads is possible
 			try {
 				sleep(duration);
 			} catch (InterruptedException e) {

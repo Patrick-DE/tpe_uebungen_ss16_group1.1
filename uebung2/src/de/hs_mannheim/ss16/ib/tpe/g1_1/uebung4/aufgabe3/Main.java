@@ -5,7 +5,7 @@ public class Main {
 	
 
 	public static void main(String[] args) {
-		TimerThread time = new TimerThread(30);
+		TimerThread time = new TimerThread(1);
 		time.start();
 	
 	}

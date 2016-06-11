@@ -3,6 +3,7 @@ package de.hs_mannheim.ss16.ib.tpe.g1_1.uebung4.aufgabe3;
 public class TimerThread extends Thread {
 
 	Ringpuffer puffer = new Ringpuffer(10);
+	// number of seconds the program is running before being terminated
 	int runTime;
 	ErzeugerThread one = new ErzeugerThread(puffer, 200);
 	ErzeugerThread two = new ErzeugerThread(puffer, 100);
@@ -12,7 +13,7 @@ public class TimerThread extends Thread {
 
 	TimerThread(int sleepTime) {
 		super();
-		runTime = sleepTime;
+		runTime = sleepTime*60;
 		one.start();
 		two.start();
 		three.start();
@@ -30,6 +31,7 @@ public class TimerThread extends Thread {
 				System.out.println("========================");
 				runTime--;
 			}
+			// After the runtime is over, all threads are interrupted so they can safely terminate
 			one.interrupt();
 			two.interrupt();
 			three.interrupt();
@@ -37,8 +39,8 @@ public class TimerThread extends Thread {
 			five.interrupt();
 			System.out.println("Programm should stop!");
 		} catch (InterruptedException e) {
-			// System.out.println(getName() + " was interrupted. " +
-			// "isInterrupted(): " + isInterrupted());
+			 System.out.println(getName() + " was interrupted. " +
+			 "isInterrupted(): " + isInterrupted());
 
 		}
 
