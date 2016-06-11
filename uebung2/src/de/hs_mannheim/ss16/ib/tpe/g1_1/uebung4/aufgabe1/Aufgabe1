@@ -1,0 +1,56 @@
+Aufgabe 1: Threads - Theorie 40 Punkte
+Beschreiben und benennen Sie die Probleme, die durch die Anwesenheit von mehreren Threads entstehen können.
+Veranschaulichen Sie außerdem jedes der genannten Probleme anhand eines Beispielprogramms (Die Kommentare in diesen Programmen durfen auf Deutsch verfasst werden).
+
+====================================================
+Durch Multithreading läuft der Programmablauf asynchronous ab. Falls ein Thread Daten schreibt kann es vorkommen, 
+dass zur gleichen Zeit ein anderer Thread die gleichen Variable beschreibt. Dies könnte eine Inkonsistenz aufweisen.
+Das problem, kann unteranderem wie folgt gelöst werden:
+synchronized(object)
+{
+    // statement to be synchronized
+}
+====================================================
+
+Safety Hazards - das Programm verhält sich in Anwesenheit mehrerer Threads nicht mehr korrekt.
+
+====================================================
+- lost update problem
+Thread1 greift auf eine Var. X lesend zu. Er verändert den Wert und schreibt diesen zurück. 
+Thread2 verändert nach dem lesen des Thread 1 den den Wert der Var X und speichert ihn (bevor der Thread 1 fertig ist!).
+-> Die Änderung des zweiten Threads werden komplett überschrieben und sind verloren.
+
+- dirty read
+Thread1 berechnet etwas und speichert ein Z wischenergebnis temporär in die Var X.
+Thread2 möchte mit X weiterarbeiten denn er weis nicht, dass es kein Finales ergebnis ist, sondern ein Zwischenergebnis.
+Somit arbeitet Thread2 mit einem falschen Ergebnis weiter.
+
+- check then act
+Wir durch eine zweifach verwendete Variable hervorgerufen.
+Dadurch, dass der Schedular die Threads wechseln kann wie er möchte kann es passieren,
+dass ein Kunde dem angezeigt wurde das das Produkt verfügbar ist es nicht kaufen kann.
+Da ein zweiter später angefangen hat allerdings schneller war.
+
+
+====================================================
+
+Liveness Hazards - Probleme bei denen ein Programm mitmehreren Threads in einen Zustand gerät, bei dem es keine Fortschritte mehr machen kann.
+
+====================================================
+
+- Deadlock
+Ein Deadlock kann auftreten, wenn mehrere Threads sich gegenseitig blockieren. 
+Jeder Thread wartet auf das Ergebnis eines anderen Threads.
+
+- Livelock
+Wie bei einem Deadlock wird wartet hier ein Thread auf den anderen!
+Der unterschied ist, dass die Threads nicht geblocked sind, sondern nur zu beschäftigt sind miteineander 
+zu kommunizieren und deswegen nicht weiter arbeiten können.
+Als Beispiel: Zwei Personen die einanderm im Flur begegnen. Um vorbeizukommen, geht der erste nach links und der andere nach rechts.
+Allerdings merken sie, dass obwohl sie ausgewichen sind und platzgemacht haben, dass es wieder blockiert ist.
+So geht das ganze unendlich weiter.
+
+- Starvation(Aushungern)
+Das kommt vor, wenn der "kleine" Thread nicht weiter arbeiten kann, da ein anderer (große) Thread die Ressourcen belegt
+und der Schedular dem "kleinen" Prozess nie eine Zeit zuweist in der der "große" nicht arbeitet.
+
